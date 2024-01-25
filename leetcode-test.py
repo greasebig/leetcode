@@ -1,5 +1,7 @@
 from typing import *
 import numpy as np
+
+## leetcode 4 寻找两个正序数组的中位数
 class Solution:
     def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
         if len(nums1) > len(nums2):
@@ -28,7 +30,7 @@ nums1 =[1,2]
 nums2 =[3,4]
 print(solu.findMedianSortedArrays(nums1,nums2))
 
-
+## 链表反转
 class ListNode:
     def __init__(self, x):
         self.val = x
