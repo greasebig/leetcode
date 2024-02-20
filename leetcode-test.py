@@ -131,3 +131,66 @@ class Solution:
 solu=Solution()
 print(solu.lengthOfLongestSubstring("dvdf"))
 print(solu.lengthOfLongestSubstring("pwwkew"))
+
+
+# 4. 寻找两个正序数组的中位数
+class Solution:
+    def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
+
+        if len(nums1) > len(nums2):
+            nums1,nums2=nums2,nums1  #？
+        x = len(nums1)
+        y = len(nums2)
+        
+        low,high=0,x
+        while low <= high:
+            partition_A = (low+high)//2  
+            partition_B = (x+y+1)//2 - partition_A   #？
+
+            X_little = float('-inf') if partition_A==0 else nums1[partition_A-1]  #？
+            X_big = float('inf') if partition_A==x else nums1[partition_A]
+            Y_little = float('-inf') if partition_B==0 else nums2[partition_B-1]
+            Y_big = float('inf') if partition_B==y else nums2[partition_B]
+
+            if X_little <= Y_big and Y_little <= X_big :
+                if (x+y)%2 == 0:
+                    return (max(X_little,Y_little) + min(X_big,Y_big))/2  #？
+                else:
+                    return max(X_little,Y_little)  #？
+            elif Y_big < X_little:
+                high = partition_A-1  #？
+            else:
+                low = partition_A+1  #？
+#？边界，极端情况不知道如何设置
+
+
+# 5. 最长回文子串
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        if len(s)==0:
+            return ""
+        if len(s)==1:
+            return s
+
+        start = 0 
+        end = 0
+
+        for i in range(len(s)):
+            len_self = self.expand_around_center(s,i,i)
+            len_self_and_right = self.expand_around_center(s,i,i+1)
+            max_len = max(len_self,len_self_and_right)
+
+            if max_len > end - start:
+                start = i - (max_len-1)//2
+                end = i + max_len//2
+        return s[start:end+1]
+
+    def expand_around_center(self, s, left, right):
+            while left >= 0 and right < len(s) and s[left] == s[right]:
+                left -= 1
+                right += 1
+                len_it = right - left - 1
+            return len_it
+solu=Solution()
+print(solu.longestPalindrome("babad"))
+
