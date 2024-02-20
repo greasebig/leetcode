@@ -61,7 +61,7 @@ print(solu.matrixmultiple(nums1,nums2))
 nums1 =[1,2]
 nums2 =[3,4]
 
-# 1
+# 1.两数之和
 class Solution:
     def twoSum(self, nums: List[int], target: int) -> List[int]:
         l=len(nums)
@@ -72,7 +72,7 @@ class Solution:
 solu=Solution()
 print(solu.twoSum([3,2,4],6))
 
-# 2
+# 2.两数相加
 class ListNode:
     def __init__(self, val=0, next=None):
         self.val = val
@@ -116,7 +116,7 @@ for i in range(len(l2_list)):
 l2=l2.next
 print(solu.addTwoNumbers(l1,l2))
 
-# 3
+# 3. 无重复字符的最长子串
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
         left_pointer=0
@@ -165,6 +165,7 @@ class Solution:
 
 
 # 5. 最长回文子串
+# 中心扩展法
 class Solution:
     def longestPalindrome(self, s: str) -> str:
         if len(s)==0:
@@ -194,3 +195,33 @@ class Solution:
 solu=Solution()
 print(solu.longestPalindrome("babad"))
 
+#动态规划
+def longestPalindrome(self, s: str) -> str:
+        n = len(s)
+        # 初始化一个二维数组，全部置为False
+        dp = [[False] * n for _ in range(n)]
+
+        start = 0  # 记录最长回文子串的起始位置
+        max_len = 1  # 记录最长回文子串的长度
+
+        # 所有长度为1的子串都是回文串
+        for i in range(n):
+            dp[i][i] = True
+
+        # 遍历字符串，长度从2开始逐渐增加
+        for length in range(2, n + 1):
+            for i in range(n - length + 1):
+                j = i + length - 1
+
+                # 判断当前子串是否是回文串
+                if length == 2 and s[i] == s[j]:
+                    dp[i][j] = True
+                elif s[i] == s[j] and dp[i + 1][j - 1]:
+                    dp[i][j] = True
+
+                # 更新最长回文子串的起始位置和长度
+                if dp[i][j] and length > max_len:
+                    start = i
+                    max_len = length
+
+        return s[start:start + max_len]
