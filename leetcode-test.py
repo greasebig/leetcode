@@ -196,6 +196,7 @@ solu=Solution()
 print(solu.longestPalindrome("babad"))
 
 #动态规划
+#s[i+1:j−1]是子问题，空间换时间，但是实际上时间空间都比中心扩散法差
 def longestPalindrome(self, s: str) -> str:
         n = len(s)
         # 初始化一个二维数组，全部置为False
@@ -225,3 +226,64 @@ def longestPalindrome(self, s: str) -> str:
                     max_len = length
 
         return s[start:start + max_len]
+
+#自己写的动规
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        n = len(s)
+        dp = [[False] * n for _ in range(n)]
+
+        for i in range(n):
+            dp[i][i] = True
+        
+        start = 0
+        max_len = 1
+
+        for length in range(2,n+1):  #！
+            for i in range(n - length + 1): #！
+                j = i + length -1 #！
+
+                if length == 2 and s[i] == s[j]:
+                    dp[i][j] = True
+                elif s[i] == s[j] and dp[i+1][j-1] == True: #！
+                    dp[i][j] = True
+                
+                if dp[i][j] == True and length > max_len:  #！
+                    max_len = length
+                    start = i
+
+        return s[start:start+max_len]
+
+
+
+
+# 6. Z 字形变换
+# 找规律硬解，边界多，时间空间也差，一个半小时，中等
+class Solution:
+    def convert(self, s: str, numRows: int) -> str:
+        if numRows == 1: return s  #！
+        row = numRows
+        length = len(s)
+        column = (length//(numRows+numRows-2) + 1 ) * (numRows-1)  #！
+        # 根据规律计算column大小，并额外添加一组
+        dp = [["" for _ in range(column)] for _ in range(row)]  #！
+        char_index = 0
+        
+        for current_column in range(column):
+            for current_row in range(row):
+                if current_column % (row - 1) == 0:  #！%和//总是分不清，用错
+                    if char_index >= length:break  #！
+                    dp[current_row][current_column] = s[char_index]  #！行列一开始写反
+                    char_index += 1  #！
+
+                elif current_row == row - current_column%(row-1) -1:  #！
+                    if char_index >= length:break
+                    dp[current_row][current_column] = s[char_index]
+                    char_index += 1
+
+        new_s = ''.join(dp[current_row][current_column] for current_row in range(row) for current_column in range(column))  #！
+        return new_s
+
+
+
+
