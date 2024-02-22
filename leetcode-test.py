@@ -258,7 +258,7 @@ class Solution:
 
 
 # 6. Z 字形变换
-# 找规律硬解，边界多，时间空间也差，一个半小时，中等
+# 找规律硬解，周期，边界多，时间空间也差，一个半小时，中等
 class Solution:
     def convert(self, s: str, numRows: int) -> str:
         if numRows == 1: return s  #！
@@ -283,7 +283,173 @@ class Solution:
 
         new_s = ''.join(dp[current_row][current_column] for current_row in range(row) for current_column in range(column))  #！
         return new_s
+# 字符串相加只能使用 + 或者 ''.join()
+# 不能使用.append(),append用在普通列表。虽然列表和字符串取值方式一样。
 
 
+# 7. 整数反转
+class Solution:
+    def reverse(self, x: int) -> int:
+        
+        flag = 1
+        if x<0:
+            flag = -1
+            x = -x
+        new_num = 0
+        while x != 0:
+            a = x % 10
+            new_num += a * 10 ** (len(str(x)) - 1)
+            x = x // 10
+        if new_num > 2 ** 31 - 1 or new_num < -2 ** 31: return 0
+        return new_num if flag>0 else -new_num
 
+
+# 9. 回文数
+class Solution:
+    def isPalindrome(self, x: int) -> bool:
+        if x < 0 : return False
+
+        new_num = 0
+        new_num_list = []
+        length = 0
+        x2 = x  #！
+        while x2 != 0:
+            new_num_list.append(x2 % 10)
+            x2 = x2 // 10
+            length += 1
+        for i in range(length):
+            new_num += new_num_list[i] * 10 ** (length - i -1)
+        return True if new_num == x else False  #！
+
+class Solution:
+    def isPalindrome(self, x: int) -> bool:
+        if x < 0 or (x % 10 == 0 and x != 0) : return False
+        new_num = 0
+        new_num_list = []
+        length = 0
+        x2 = x
+        while x2 > new_num:
+            new_num = new_num * 10 + x2 % 10
+            x2 = x2 // 10
+        return new_num == x2 or new_num//10 == x2
+
+
+# 10. 正则表达式匹配
+# 标准答案dp
+class Solution:
+    def isMatch(self, s: str, p: str) -> bool:
+        m, n = len(s), len(p)
+
+        def matches(i: int, j: int) -> bool:
+            if i == 0:
+                return False
+            if p[j - 1] == '.':
+                return True
+            return s[i - 1] == p[j - 1]
+
+        f = [[False] * (n + 1) for _ in range(m + 1)]
+        f[0][0] = True
+        for i in range(m + 1):
+            for j in range(1, n + 1):
+                if p[j - 1] == '*':
+                    f[i][j] |= f[i][j - 2]  # 尝试，去掉这*两个，看看是否匹配
+                    if matches(i, j - 1):  # 如果*的上一个与字符匹配。参照后三行。
+                        f[i][j] |= f[i - 1][j] # ？
+                else:
+                    if matches(i, j):  # 如果i,j匹配，则由上一组决定现在的dp
+                        f[i][j] |= f[i - 1][j - 1] # 普通匹配
+        return f[m][n]
+
+# 自己重写dp
+class Solution:
+    def isMatch(self, s: str, p: str) -> bool: 
+        m, n = len(s), len(p)
+        dp = [[False] * (n+1) for _ in range(m+1)]  #！
+        dp[0][0] = True
+
+        def match(i,j):
+            if i == 0 : return False
+            elif p[j-1] == '.' : return True
+            elif s[i-1] == p[j-1] : return True     #！可以优化
+            return False
+        
+        for i in range(m+1):  #！
+            for j in range(1, n+1):  #！
+                if p[j-1] == '*':
+                    dp[i][j] |= dp[i][j-2]  #！
+                    if match(i,j-1):
+                        dp[i][j] |= dp[i-1][j]  #！
+                elif match(i,j):
+                    dp[i][j] |= dp[i-1][j-1]
+        return dp[-1][-1]  #！
+
+
+# 自己无法通过的代码，Solution().isMatch("aaa","ab*a*c*a")，硬匹配
+class Solution:
+    def isMatch(self, s: str, p: str) -> bool: 
+        if len(p) > 2 :    
+            if s[0] != p[0] and p[0] != '.' and p[1] != '*' : return False
+        
+        
+        i = 0 # move index
+        judge_num = i
+        while s:
+            if i >= len(p) : return False
+            if p[i] == '*' :
+                if p[i-1] == '.': 
+                    s = s[1:]
+                    judge_num += 1
+                    continue
+                if s[0] != p[i-1] : return False
+
+            elif i + 1 < len(p):
+                if s[0] != p[i] and p[i] != '.' and p[i+1] != '*' : 
+                    return False
+                elif s[0] != p[i] and p[i] != '.' and p[i+1] == '*' :
+                    if i+2 < len(p) :
+                        ii = i
+                        while ii+2 < len(p) :
+                            if p[i+2] == '*' : 
+                                p = p[:i+1] + p[i+2:]
+                                ii += 1
+                            else : break
+                        if p[i+2] == s[0] or p[i+2] == '.' : 
+                            p = p[:i] + p[i+2:]
+                            
+                            
+                    else: return False
+                    
+            elif i + 1 >= len(p):
+                if s[0] != p[i] and p[i] != '.' : return False
+            i += 1
+            judge_num += 1
+            s = s[1:]
+        return True if len(p) == judge_num else False
+
+
+# 11. 盛最多水的容器
+# 双指针
+class Solution:
+    def maxArea(self, height: List[int]) -> int:
+        max_area = 0
+        length = len(height)
+        left = 0
+        right = length -1
+        while left < right :
+            area = (right - left) * min(height[right], height[left])
+            if height[right] > height[left] : left += 1
+            else : right -= 1
+            if area > max_area : max_area = area
+        return max_area
+
+# 自己的，超出时间限制
+class Solution:
+    def maxArea(self, height: List[int]) -> int:
+        max_area = 0
+        length = len(height)
+        for i in range(length):
+            for j in range(i + 1, length):
+                area = (j - i) * min(height[i], height[j])
+                if area > max_area : max_area = area
+        return max_area
 
