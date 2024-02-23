@@ -453,3 +453,34 @@ class Solution:
                 if area > max_area : max_area = area
         return max_area
 
+
+
+# 12. 整数转罗马数字
+class Solution(object):
+    def intToRoman(self, num):
+        """
+        :type num: int
+        :rtype: str
+        """
+        number = str(num)
+        length = len(number)
+
+        def len1(num1, index):
+            if index == 1 : special1, special2, special3 = 'I', 'V', 'X'
+            elif index == 2 : special1, special2, special3 = 'X', 'L', 'C'
+            elif index == 3 : special1, special2, special3 = 'C', 'D', 'M'
+            elif index == 4 : special1, special2, special3 = 'M', 'M', 'M'
+
+            if num1 < 4 : return special1 * num1
+            elif num1 == 4 : return special1 + special2
+            elif num1 == 5 : return special2
+            elif num1 > 5 and num1 < 9 :  return special2 + special1 * (num1 - 5)
+            elif num1 == 9 : return special1 + special3
+
+        roman = ''
+        index = 1
+        while num :
+            roman = len1(num % 10, index) + roman
+            num = num // 10
+            index += 1
+        return roman
