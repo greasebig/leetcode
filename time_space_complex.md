@@ -143,3 +143,11 @@ O(log n)的算法通常是二分查找或其他类似的分治算法，
 - 快排  
 pivot，用递归不断大小划分
 - 二分查找
+
+
+## hashmap 列表list
+- if hashmap[s[i]] >= hashmap[s[i + 1]] :    #! 读hashmap用[] 而不是()
+- f = [[False] * (n + 1) for _ in range(m + 1)]    
+- for (key,value) in s
+- new_num_list.append(x2 % 10)
+- 字符串不可以append，只能 + 或 ''.join()
