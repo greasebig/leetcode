@@ -45,6 +45,32 @@ class Solution:
             head = nextnode #把头节点移向下一个节点，此时，这个节点也是一个不连续节点
         return myreverse
 
+## 链表反转
+class ListNode:
+    def __init__(self, x):
+        self.val = x
+        self.next = None
+class Solution:
+    def reverseList(self, head: ListNode) -> ListNode:
+        reverse = None
+        while head:
+            nextnode = head.next  #定义第二个节
+            head.next = reverse   # 将首节点的next指向p，第一次执行时指向none,再次执行时指向断掉的部分节点
+            reverse = head  #将断掉的节点（即原来链表中前面的节点）赋给p
+            head = nextnode #把头节点移向下一个节点，此时，这个节点也是一个不连续节点
+        return reverse
+# reverse none
+# 1     - 2      - 3
+# head
+#      next_node
+# reverse
+#      head
+
+    #      next_node
+    # reverse
+
+
+
 ## 矩阵乘法
 class Solution:
     def matrixmultiple(self, A, B):
@@ -703,3 +729,107 @@ class Solution:
                             threesum.append([nums[i], nums[j], nums[k]])
                             threesum_norank.append({nums[i], nums[j], nums[k]})
         return threesum
+
+
+
+
+
+
+
+# 16. 最接近的三数之和
+class Solution:
+    def threeSumClosest(self, nums: List[int], target: int) -> int:
+        nums.sort()
+        min_distance = float('inf')
+        closest = 0
+        for i in  range(len(nums) - 2) :
+            if i > 0 and nums[i] == nums[i - 1] : continue
+            left = i + 1 
+            right = len(nums) - 1
+            
+            while left < right :
+                summary = nums[i] + nums[left] + nums[right] 
+                distance = summary - target
+                if abs(distance) < min_distance :
+                    min_distance = abs(distance)
+                    closest = summary
+                
+                if distance == 0 : break
+                elif distance < 0 :      # ！
+                    
+                    while left < right and nums[left] == nums[left + 1] :
+                        left += 1
+                    left += 1          # ！
+                elif distance > 0 : 
+                    
+                    while left < right and nums[right] == nums[right - 1] :
+                        right -= 1
+                    right -= 1
+
+
+        return closest
+
+
+
+# 17. 电话号码的字母组合
+class Solution:
+    def letterCombinations(self, digits: str) -> List[str]:
+        if digits == '' : return []
+        table = {
+            '2' : ['a', 'b', 'c'],
+            '3' : ['d', 'e', 'f'],
+            '4' : ['i', 'g', 'h'],
+            '5' : ['j', 'k', 'l'],
+            '6' : ['m', 'n', 'o'],
+            '7' : ['p', 'q', 'r', 's'],
+            '8' : ['t', 'u', 'v'],
+            '9' : ['w', 'x', 'y', 'z'],    # ！
+        }
+        combile = []
+        letter_group = []
+        while digits :
+            letter_group = letter_group + [table[digits[0]]]     # ！少了[]   列表就是concat
+            digits = digits[1:]
+        combile = letter_group[0] 
+        for group in letter_group[1:] :
+            new_combine = []
+            for char1 in  combile :
+                for char2 in group :
+                    new_combine.append(char1 + char2)       # ！
+            combile = new_combine
+        return combile
+
+
+# 18. 四数之和
+
+class Solution:
+    def fourSum(self, nums: List[int], target: int) -> List[List[int]]:
+        nums.sort()
+        foursum = []
+
+        for i in range(len(nums) - 3):
+            if i > 0 and nums[i] == nums[i - 1] : continue
+            for j in range(i + 1, len(nums) - 2):
+                if j > i + 1 and nums[j] == nums[j - 1] : continue        # ！ 关键在 j > i + 1   之前是 j > 1
+                left = j + 1
+                right = len(nums) - 1
+                while left < right :
+                    summary = nums[i] + nums[j] + nums[left] + nums[right]
+                    if summary == target :
+                        foursum.append([nums[i], nums[j], nums[left], nums[right]])
+                        while left < right and nums[left] == nums[left + 1] :
+                            left += 1
+                        while left < right and nums[right - 1] == nums[right] :
+                            right -= 1
+                        left += 1
+                        right -= 1
+                    elif summary < target :
+                        while left < right and nums[left] == nums[left + 1] :
+                            left += 1
+                        left += 1
+                    elif summary > target :
+                        while left < right and nums[right - 1] == nums[right] :
+                            right -= 1
+                        right -= 1
+                
+        return foursum

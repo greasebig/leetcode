@@ -154,7 +154,12 @@ s = [['I', 1], ['V', 5], ['X', 10]]   这两样读取都正确，读取结果都
 for key,value in s   读取为 'I' 和 1   
 for key in s   读取为('I', 1)
 - new_num_list.append(x2 % 10)    
-字符串不可以append，只能 + 或 ''.join()   
-都是用 [] 取值。字符串，列表，hashmap   
-函数采用()
+字符串不可以append，只能 + 或 ''.join()    
+char1 + char2 字符串相加    
+''.join()的对象是一个列表，而不是输入多个单体    
+- 都是用 [] 取值。字符串，列表，hashmap   
+函数采用()    
+- letter_group + [table[digits[0]]]     # ！少了[]   列表 + 就是concat   
+new_combine.append(char1 + char2)       # ！往列表内添加元素，不能list + str     
+
 
