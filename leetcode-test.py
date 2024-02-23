@@ -484,3 +484,34 @@ class Solution(object):
             num = num // 10
             index += 1
         return roman
+
+# 13. 罗马数字转整数
+# 一开始按照12思路不会写。换成hashmap以及一次读一个，且多比较后一位
+class Solution(object):
+    def romanToInt(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
+        hashmap = {
+                    'I': 1,
+                    'V': 5,
+                    'X': 10,
+                    'L': 50,
+                    'C': 100,
+                    'D': 500,
+                    'M': 1000,
+                    }
+        
+        number = 0
+        for i in range(len(s)) :
+            if i + 1 < len(s) :
+                if hashmap[s[i]] >= hashmap[s[i + 1]] :    #! 读hashmap用[] 而不是()
+                    number += hashmap[s[i]]
+                else :
+                    number -= hashmap[s[i]]
+            else :
+                number += hashmap[s[i]]
+
+        return number
+
