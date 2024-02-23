@@ -533,3 +533,173 @@ class Solution:
             common_prefix += strs[0][char_index] 
         return common_prefix
 
+
+
+# 15. 三数之和
+# 排序 + 双指针
+class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        
+        threesum = []
+        threesum_dict = []
+
+        import random
+        def half_rank(numbers) :
+            if len(numbers) < 2 : return numbers
+            left_nums = []
+            right_nums = []
+            mid_nums = []
+            pivot = random.randint(0, len(numbers) - 1)
+            for element in  numbers:
+                if element < numbers[pivot] : left_nums.append(element)
+                elif element > numbers[pivot] : right_nums.append(element)
+                else : mid_nums.append(element)
+            return half_rank(left_nums) + mid_nums + half_rank(right_nums)
+
+        rank_num = half_rank(nums)
+        # nums.sort()
+        # rank_num = nums   # 这个速度和空间都和half_rank一样
+        
+        for i in  range(len(rank_num) - 2) :
+            if rank_num[i] > 0 : break            # ！
+            if(i>0 and rank_num[i]==rank_num[i-1]):       # ！这两句判断加快，从308/313到311/313
+                continue
+            left = i + 1 
+            right = len(rank_num) - 1
+            while left < right :
+                if rank_num[i] + rank_num[left] + rank_num[right] == 0 : 
+                    
+                    threesum.append([rank_num[i], rank_num[left], rank_num[right]])       # ！通过上面加的if，去掉dict查看重复值的步骤，最后通过
+                    
+                    while 1:
+                        left += 1
+                        if left < right :
+                            if rank_num[left] != rank_num[left - 1] : break
+                        else : break
+                    while 1:    
+                        right -= 1
+                        if left < right :
+                            if rank_num[right] != rank_num[right + 1] : break
+                        else : break
+                    
+                elif rank_num[i] + rank_num[left] + rank_num[right] < 0 : 
+                    while 1:
+                        left += 1
+                        if left < right :
+                            if rank_num[left] != rank_num[left - 1] : break
+                        else : break
+                elif rank_num[i] + rank_num[left] + rank_num[right] > 0 : 
+                    while 1:
+                        right -= 1
+                        if left < right :
+                            if rank_num[right] != rank_num[right + 1] : break
+                        else : break
+
+        return threesum
+
+
+# 以前是用 set() 再用 list() 做
+# 现在是 超时 或者 重复 或者 漏
+# 排序 + 双指针。 自己写。重复的不再判断，跳过。超时
+class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        
+        threesum = []
+        threesum_dict = []
+
+        import random
+        def half_rank(numbers) :
+            if len(numbers) < 2 : return numbers
+            left_nums = []
+            right_nums = []
+            mid_nums = []
+            pivot = random.randint(0, len(numbers) - 1)
+            for element in  numbers:
+                if element < numbers[pivot] : left_nums.append(element)
+                elif element > numbers[pivot] : right_nums.append(element)
+                else : mid_nums.append(element)
+            return half_rank(left_nums) + mid_nums + half_rank(right_nums)
+
+        rank_num = half_rank(nums)
+        
+        for i in  range(len(rank_num) - 2) :
+            left = i + 1 
+            right = len(rank_num) - 1
+            while left < right :
+                if rank_num[i] + rank_num[left] + rank_num[right] == 0 : 
+                    if {rank_num[i], rank_num[left], rank_num[right]} not in threesum_dict :
+                        threesum.append([rank_num[i], rank_num[left], rank_num[right]])
+                        threesum_dict.append({rank_num[i],rank_num[left], rank_num[right]})
+                    else : 
+                        while 1:
+                            left += 1
+                            if left < right :
+                                if rank_num[left] != rank_num[left - 1] : break
+                            else : break
+                elif rank_num[i] + rank_num[left] + rank_num[right] < 0 : 
+                    while 1:
+                        left += 1
+                        if left < right :
+                            if rank_num[left] != rank_num[left - 1] : break
+                        else : break
+                elif rank_num[i] + rank_num[left] + rank_num[right] > 0 : 
+                    while 1:
+                        right -= 1
+                        if left < right :
+                            if rank_num[right] != rank_num[right + 1] : break
+                        else : break
+
+        return threesum
+
+# 排序 + 双指针 。 自己写。超出时间限制
+class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        
+        threesum = []
+        threesum_dict = []
+
+        def half_rank(numbers) :
+            if len(numbers) < 2 : return numbers
+            left_nums = []
+            right_nums = []
+            mid_nums = []
+            pivot = len(numbers) // 2
+            for element in  numbers:
+                if element < numbers[pivot] : left_nums.append(element)
+                elif element > numbers[pivot] : right_nums.append(element)
+                else : mid_nums.append(element)
+            return half_rank(left_nums) + mid_nums + half_rank(right_nums)
+
+        rank_num = half_rank(nums)
+        
+        for i in  range(len(rank_num) - 2) :
+            left = i + 1 
+            right = len(rank_num) - 1
+            while left < right :
+                if rank_num[i] + rank_num[left] + rank_num[right] == 0 : 
+                    if {rank_num[i], rank_num[left], rank_num[right]} not in threesum_dict :
+                        threesum.append([rank_num[i], rank_num[left], rank_num[right]])
+                        threesum_dict.append({rank_num[i],rank_num[left], rank_num[right]})
+                    else : left += 1
+                elif rank_num[i] + rank_num[left] + rank_num[right] < 0 : 
+                    left += 1
+                elif rank_num[i] + rank_num[left] + rank_num[right] > 0 : 
+                    right -= 1
+
+        return threesum
+
+# 超时
+class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        length = len(nums)
+        threesum = []
+        threesum_norank = []
+        for i in range(length) :
+            for j in range(i+1, length) :
+                
+                for k in range(j+1, length) :
+                    if nums[i] + nums[k] + nums[j] == 0 : 
+                        if {nums[i], nums[j], nums[k]} not in threesum_norank :
+                            threesum.append([nums[i], nums[j], nums[k]])
+                            threesum_norank.append({nums[i], nums[j], nums[k]})
+        return threesum
