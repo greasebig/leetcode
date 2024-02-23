@@ -146,8 +146,15 @@ pivot，用递归不断大小划分
 
 
 ## hashmap 列表list
-- if hashmap[s[i]] >= hashmap[s[i + 1]] :    #! 读hashmap用[] 而不是()
-- f = [[False] * (n + 1) for _ in range(m + 1)]    
-- for (key,value) in s
-- new_num_list.append(x2 % 10)
-- 字符串不可以append，只能 + 或 ''.join()
+- hashmap = {'I':1, 'V':5, 'X':10}   hashmap记录键值对    
+if hashmap[s[i]] >= hashmap[s[i + 1]] :    #! 读hashmap用[] 而不是()   
+- 创建列表 f = [[False] * (n + 1) for _ in range(m + 1)]    
+- s = [('I', 1), ('V', 5), ('X', 10)] 列表记录键值对    
+s = [['I', 1], ['V', 5], ['X', 10]]   这两样读取都正确，读取结果都一样    
+for key,value in s   读取为 'I' 和 1   
+for key in s   读取为('I', 1)
+- new_num_list.append(x2 % 10)    
+字符串不可以append，只能 + 或 ''.join()   
+都是用 [] 取值。字符串，列表，hashmap   
+函数采用()
+
