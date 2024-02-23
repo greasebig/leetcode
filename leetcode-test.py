@@ -486,7 +486,7 @@ class Solution(object):
         return roman
 
 # 13. 罗马数字转整数
-# 一开始按照12思路不会写。换成hashmap以及一次读一个，且多比较后一位
+# 一开始按照12思路不会写。换成hashmap以及一次读一个，且多看后一位
 class Solution(object):
     def romanToInt(self, s):
         """
@@ -514,4 +514,22 @@ class Solution(object):
                 number += hashmap[s[i]]
 
         return number
+
+
+# 14. 最长公共前缀
+class Solution:
+    def longestCommonPrefix(self, strs: List[str]) -> str:
+        common_prefix = ''
+        if len(strs) == 0 : return ''
+        if len(strs) == 1 : return strs[0]
+        min_length = float('inf')               # ！
+        for word in strs :
+            if len(word) < min_length : min_length = len(word)
+
+        for char_index in range(min_length):
+            for word in strs[1:] : 
+                if word[char_index] != strs[0][char_index] : return common_prefix
+                else : continue
+            common_prefix += strs[0][char_index] 
+        return common_prefix
 
