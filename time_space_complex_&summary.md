@@ -159,8 +159,14 @@ char1 + char2 字符串相加
 ''.join()的对象是一个列表，而不是输入多个单体    
 - 都是用 [] 取值。字符串，列表，hashmap   
 函数采用()    
-- letter_group + [table[digits[0]]]     # ！少了[]   列表 + 就是concat   
-new_combine.append(char1 + char2)       # ！往列表内添加元素，不能list + str     
+- letter_group + [table[digits[0]]]     # ！少了[]   列表 + 就是concat     
+new_combine.append(char1 + char2)       # ！往列表内添加元素，不能list + str       
+- 列表用pop，pop()最后一个，pop(2)索引2即第三个，   字符串不能用pop，只能切片     
+- left_list = ''    
+left_list = []    
+都可以当成 if False :     
+
+
 
 ## 反转链表
 ```

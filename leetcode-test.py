@@ -836,6 +836,27 @@ class Solution:
 
 
 # 19. 删除链表的倒数第 N 个结点
+# 双指针，快慢，测试用例中速度存储一样
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
+        fast = head
+        dummy = ListNode(0, head)
+        slow = dummy
+        for _ in range(n) :
+            fast = fast.next
+        while fast :
+            fast = fast.next
+            slow = slow.next
+        slow.next = slow.next.next
+        return dummy.next
+
+
+# 自己的反转两次
 class Solution:
     def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
         reverse = None
@@ -858,3 +879,80 @@ class Solution:
                 reverse_again_and_delete = head
                 head = next_node
         return reverse_again_and_delete
+
+
+
+
+
+# 20. 有效的括号
+class Solution:
+    def isValid(self, s: str) -> bool:
+        if len(s) == 0 : return True
+        elif len(s) == 1 : return False
+        #left_symbol = ['(', '[','{']
+        table = {
+            '(' : ')',
+            '[' : ']',
+            '{' : '}',
+        }
+        left_symbol = table.keys()      # ！ 相比list用时从44ms提升到33ms
+        left_list = []
+        
+        while s :
+            if s[0] in left_symbol : 
+                left_list.append(s[0])
+                s = s[1:]
+            else :
+                if not left_list and s[0] : return False      # ！
+                if table[left_list.pop()] == s[0] :      # ！
+                    s = s[1:]
+                else :
+                    return False
+        return False if left_list else True        # ！
+
+
+
+# 21. 合并两个有序链表
+class Solution:
+    def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
+        if not list2 : return list1
+        elif not list1 : return list2
+        
+        if list1.val > list2.val : list1, list2 = list2, list1       # ！
+
+        head1 = list1
+        head2 = list2
+        
+        while head1 : 
+            if head2.next :       # ！
+                if head1.val <= head2.val and head1.next :
+                    if head2.val <= head1.next.val :
+                        present_node2 = head2       # ！
+                        head2 = head2.next
+                        next_node1 = head1.next       # ！
+                        head1.next =  present_node2
+                        head1 = head1.next
+                        head1.next = next_node1    
+                    else :
+                        head1 = head1.next
+                elif head1.val <= head2.val and not head1.next :
+                    head1.next =  head2
+                    break
+                    
+            elif not head2.next: 
+                if head1.val <= head2.val and head1.next :
+                    if head2.val <= head1.next.val :
+                        present_node2 = head2
+                        next_node1 = head1.next
+                        head1.next =  present_node2
+                        head1 = head1.next
+                        head1.next = next_node1   
+                        break        # ！
+                    else :
+                        head1 = head1.next
+                elif head1.val <= head2.val and not head1.next :
+                    head1.next =  head2
+                    break
+                
+        return list1
+
