@@ -162,4 +162,24 @@ char1 + char2 字符串相加
 - letter_group + [table[digits[0]]]     # ！少了[]   列表 + 就是concat   
 new_combine.append(char1 + char2)       # ！往列表内添加元素，不能list + str     
 
+## 反转链表
+```
+# reverse none
+# 1     - 2      - 3
+# head
+#      next_node
+# reverse
+#      head
+```
+
+## 深浅拷贝
+元组，列表，链表 都需要深拷贝    
+reverse2 = reverse    
+reverse2.next = None      
+reverse2会改变原链表    
+如果你想创建一个链表的副本而不影响原始链表，你需要使用深拷贝（deep copy）   
+reverse2 = copy.deepcopy(reverse)        
+
+元组original_tuple = ([1, 2, 3], [4, 5, 6])   
+列表original_list = [[1, 2, 3], [4, 5, 6]]
 
