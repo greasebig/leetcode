@@ -183,3 +183,9 @@ reverse2 = copy.deepcopy(reverse)
 元组original_tuple = ([1, 2, 3], [4, 5, 6])   
 列表original_list = [[1, 2, 3], [4, 5, 6]]
 
+```
+first = head
+for i in range(n):
+    first = first.next
+这样只改变first 不改变head
+```
