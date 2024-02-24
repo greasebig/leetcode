@@ -833,3 +833,28 @@ class Solution:
                         right -= 1
                 
         return foursum
+
+
+# 19. 删除链表的倒数第 N 个结点
+class Solution:
+    def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
+        reverse = None
+        while head :    # ！ 反转链表老是忘记
+            next_node = head.next
+            head.next = reverse
+            reverse = head
+            head = next_node
+
+        reverse_again_and_delete = None
+        head = reverse
+        i = 0
+        while head :
+            i += 1
+            if i == n :
+                head = head.next
+            else :
+                next_node = head.next
+                head.next = reverse_again_and_delete
+                reverse_again_and_delete = head
+                head = next_node
+        return reverse_again_and_delete
