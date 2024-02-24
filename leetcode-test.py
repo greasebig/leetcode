@@ -956,3 +956,141 @@ class Solution:
                 
         return list1
 
+l1_list= [5]
+l1=ListNode()
+next_node=l1
+for i in range(len(l1_list)):
+    next_node.next=ListNode()
+    next_node=next_node.next
+    next_node.val=l1_list[i]
+l1=l1.next
+
+l2_list= [1,2,4]
+l2=ListNode()
+next_node=l2
+for i in range(len(l2_list)):
+    next_node.next=ListNode()
+    next_node=next_node.next
+    next_node.val=l2_list[i]
+l2=l2.next
+
+print(Solution().mergeTwoLists(l1, l2))
+
+
+# 22. 括号生成
+# 想不出一镜到底的方法
+# dfs
+class Solution:
+    def generateParenthesis(self, n: int) -> List[str]:
+        parenthesis = []
+        
+        def dfs(strs, left, right) :       # ！
+            if left == 0 and right == 0 :
+                parenthesis.append(strs)
+                return
+            if right < left :
+                return
+            if left > 0 :
+                dfs(strs + '(', left - 1 ,right)
+            if right > 0 :
+                dfs(strs + ')', left ,right - 1)
+        dfs('', n , n)
+        return parenthesis
+
+
+# 23. 合并 K 个升序链表
+
+class Solution:
+    def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+        if len(lists) == 0 : return None
+        elif len(lists) == 1 : return lists[0]
+
+        list1 = None
+        index = 0
+        for number in range(0, len(lists)) :   # ！上个版本使用while循环，然后自己对index加法，导致容易漏或越界
+            index = number
+            if lists[index] :
+                list1 = lists[index]
+                break
+
+        if index == len(lists) - 1: return list1  # ！
+        elif index == len(lists): return None
+        
+        for index2 in range(index + 1, len(lists)) :  # ！
+            list2 = lists[index2]
+            if not list2 : continue
+            if list1.val > list2.val : list1, list2 = list2, list1
+            head1 = list1
+            head2 = list2
+            while head1 :
+                if head1.next :
+                    if head2.next :
+                        if head1.val <= head2.val and head2.val <= head1.next.val :
+                            present_node2 = head2
+                            head2 = head2.next
+                            next_node1 = head1.next
+                            head1.next = present_node2
+                            present_node2.next = next_node1
+                        else :
+                            head1 = head1.next
+
+                    else :
+                        if head1.val <= head2.val and head2.val <= head1.next.val :
+                            present_node2 = head2
+                            next_node1 = head1.next
+                            head1.next = present_node2
+                            present_node2.next = next_node1
+                            break
+                        else :
+                            head1 = head1.next
+
+                else : 
+                    head1.next = head2
+                    break
+        return list1
+
+
+def makeListnode(l1_list) : 
+    L1 = ListNode()
+    next_node = L1
+    for i in range(len(l1_list)):
+        next_node.next=ListNode()
+        next_node=next_node.next
+        next_node.val=l1_list[i]
+    return L1.next
+
+l1 = makeListnode([1,4,5])
+l2 = makeListnode([1])
+l3 = makeListnode([2,6])
+print(Solution().mergeKLists([None, l2]))
+
+
+# 24. 两两交换链表中的节点
+class Solution:
+    def swapPairs(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        if not head : return None
+        dummy = ListNode(0, head)
+        dummy_move = dummy  # ！
+        while head :
+            if not head.next : return dummy.next
+            else :
+                present_node = head
+                next_node = head.next
+                next_2_node = head.next.next
+
+                present_node.next = next_2_node
+                next_node.next = present_node  # ！
+                
+                dummy_move.next = next_node  # ！缺少这个，卡了好久
+                dummy_move = present_node  # ！
+
+                head = next_2_node
+
+        return dummy.next
+
+
+
+
+
+
+

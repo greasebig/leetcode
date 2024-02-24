@@ -178,6 +178,9 @@ left_list = []
 #      head
 ```
 
+### 原地交换节点 leetcode 24
+![alt text](assets_picture/time_space_complex_&summary/微信图片_20240225000117.jpg)
+
 ## 深浅拷贝
 元组，列表，链表 都需要深拷贝    
 reverse2 = reverse    
