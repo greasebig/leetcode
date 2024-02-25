@@ -1159,3 +1159,24 @@ class Solution:
         return hair.next
 
 
+
+# 26. 删除有序数组中的重复项
+class Solution:
+    def removeDuplicates(self, nums: List[int]) -> int:
+
+        left = 0        # ！想不到双指针，想用pop 或者新建列表，非原地， 或者set
+        right = left + 1
+        while left < right and right < len(nums) :
+                
+            if nums[left] != nums[right] :
+                
+                nums[left + 1] = nums[right]        # ！想用number记录，但是因为用了 == 导致错误
+                left += 1
+                right += 1
+
+            else : 
+                right += 1
+        
+
+
+        return left + 1 if nums else 0
