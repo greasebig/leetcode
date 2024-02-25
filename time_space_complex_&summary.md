@@ -198,3 +198,8 @@ for i in range(n):
     first = first.next
 这样只改变first 不改变head
 ```
+
+
+
+# mid = left + ((right - left) >> 1)     
+！运算顺序 先加法后移位

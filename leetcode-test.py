@@ -1180,3 +1180,137 @@ class Solution:
 
 
         return left + 1 if nums else 0
+
+
+# 27. 移除元素
+
+class Solution:
+    def removeElement(self, nums: List[int], val: int) -> int:
+        index = 0
+        while 1:
+            if index >= len(nums) : break
+            if nums[index] == val :
+                nums.pop(index)
+            else :
+                index += 1
+        return len(nums)
+
+
+
+# 28. 找出字符串中第一个匹配项的下标
+class Solution:
+    def strStr(self, haystack: str, needle: str) -> int:
+        if not haystack or not needle : return -1
+
+        index_haystack = 0
+        index_needle = 0
+        flag = 0
+        first_number = 0
+
+        while 1:
+
+            if index_haystack <= len(haystack) and index_needle == len(needle) and flag == 1 : return first_number        # ！
+            if index_haystack > len(haystack) - 1 : return -1        # ！
+            if haystack[index_haystack] != needle[index_needle] : 
+                index_haystack += 1
+                if flag == 1 :        # ！
+                    flag = 0
+                    index_haystack = first_number + 1        # ！
+                    first_number = 0
+                    index_needle = 0
+
+
+            elif haystack[index_haystack] == needle[index_needle] : 
+
+                if index_needle == 0 :         # ！
+                    flag = 1
+                    first_number = index_haystack
+                index_haystack += 1        # ！
+                index_needle += 1
+
+
+
+
+# 29. 两数相除
+
+# 自己的超出时间限制
+class Solution:
+    def divide(self, dividend: int, divisor: int) -> int:
+        
+        abs_dividend = abs(dividend)
+        abs_divisor = abs(divisor)
+
+        if abs_dividend < abs_divisor or abs_dividend == 0: return 0
+        if abs_divisor == 1 : 
+            if dividend >= 0 and divisor <=0 or dividend <= 0 and divisor >=0 :
+                result = - abs_dividend
+                return -2 ** 31  if result < -2 ** 31 else result
+
+            else : 
+                result = abs_dividend
+                return 2 ** 31 -1  if result > 2 ** 31 - 1 else result
+        
+        abs_result = 0
+        number = 0
+        while abs_dividend >= abs_result :
+            abs_result += abs_divisor
+            number += 1
+        
+        if dividend >= 0 and divisor <=0 or dividend <= 0 and divisor >=0 :
+            result = - (number - 1)
+            return -2 ** 31  if result < -2 ** 31 else result
+
+        else : 
+            result = number - 1
+            return 2 ** 31 -1  if result > 2 ** 31 - 1 else result
+
+
+
+
+
+# 二分查找 + 二分快速加法
+class Solution:
+    def divide(self, dividend: int, divisor: int) -> int:
+        
+        INI_MIN, INT_MAX = -2 ** 31, 2 ** 31 -1
+        if dividend == INI_MIN :
+            if divisor == 1 : return INI_MIN
+            elif divisor == -1 : return INT_MAX
+        if dividend == 0 : return 0
+        if divisor == INI_MIN : return 1 if dividend == INI_MIN else 0     # ！
+
+        flag = False
+        if dividend > 0 :
+            dividend = - dividend     # ！
+            flag = not flag     # ！不能 -flag  变成 0
+        if divisor > 0 :
+            divisor = - divisor
+            flag = not flag
+
+        def quickAdd(divisor2, factor, dividend2) :     # ！
+            accumulator = 0
+            add = divisor2
+            while factor :
+                if (factor & 1) == 1 :     # ！奇数
+                    if accumulator < dividend2 - add :
+                        return False
+                    accumulator += add
+                if factor != 1 :     # ！偶数
+                    if add < dividend2 - add :
+                        return False
+                    add += add
+                factor >>= 1      # ！除 2
+            return True                    
+
+        left, right, result = 1, INT_MAX, 0
+        while left <= right :      # ！
+            mid = left + ((right - left) >> 1)     # ！运算顺序 先加法后移位
+            is_bigger_than_divident = quickAdd(divisor, mid, dividend)
+            if is_bigger_than_divident :       # ！
+                result = mid      # ！写在这里保证// 去余数取整.  之前不写，导致if else都能有各自mid 被用作result
+                left = mid + 1
+                if left > INT_MAX :       # ！ >=
+                    break
+            else :
+                right = mid - 1
+        return -result if flag else result
