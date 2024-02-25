@@ -1088,9 +1088,74 @@ class Solution:
 
         return dummy.next
 
+# 25. K 个一组翻转链表
+class Solution:
+    def reverseKGroup(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
+
+        if not head or k == 1 : return head       # ！
+        dummy = ListNode(0, head)
+
+        reverse_all = ListNode()
+        reverse_k_group = reverse_all
+
+        reverse = None
+        number = 0
+        
+        while head :
+            number += 1
+            if number % k == 1 :       # ！
+                first_node = head       # ！
+                preserve_node = copy.deepcopy(head)       # ！
+            present_node = head
+            head = head.next
+            
+            present_node.next = reverse
+            reverse = present_node
+            
+            
+            if number % k == 0 : 
+                reverse_k_group.next = present_node       # ！
+                reverse_k_group = first_node       # ！
+                reverse = None
+
+        if number % k != 0 :
+            reverse_k_group.next = preserve_node         # ！
+        return reverse_all.next
 
 
+# 官方，没有deepcopy，没有number,，速度快十倍，存储少一半
+class Solution:
+    # 翻转一个子链表，并且返回新的头与尾
+    def reverse(self, head: ListNode, tail: ListNode):
+        prev = tail.next
+        p = head
+        while prev != tail:
+            nex = p.next
+            p.next = prev
+            prev = p
+            p = nex
+        return tail, head
 
+    def reverseKGroup(self, head: ListNode, k: int) -> ListNode:
+        hair = ListNode(0)
+        hair.next = head
+        pre = hair
 
+        while head:
+            tail = pre
+            # 查看剩余部分长度是否大于等于 k
+            for i in range(k):
+                tail = tail.next
+                if not tail:
+                    return hair.next
+            nex = tail.next
+            head, tail = self.reverse(head, tail)
+            # 把子链表重新接回原链表
+            pre.next = head
+            tail.next = nex
+            pre = tail
+            head = tail.next
+        
+        return hair.next
 
 
