@@ -1314,3 +1314,154 @@ class Solution:
             else :
                 right = mid - 1
         return -result if flag else result
+
+
+
+
+
+# 30. 串联所有单词的子串
+# 自己的，超出时间限制
+class Solution:
+    def findSubstring(self, s: str, words: List[str]) -> List[int]:
+        index_list = []
+        for s_index in range(len(s) - len(words) * len(words[0]) + 1) :      # ！
+            
+            words_copy = copy.deepcopy(words)
+            length = len(words_copy)
+            is_match = True
+
+            for number in range(length) :
+                if s[s_index + len(words[0]) * number : s_index + len(words[0]) * (number + 1)] in words_copy :     # ！
+                    words_copy.remove(s[s_index + len(words[0]) * number : s_index + len(words[0]) * (number + 1)])     # ！
+
+                else :
+                    is_match = False
+                    break
+            if is_match : index_list.append(s_index)
+
+        return index_list
+
+# 官方答案，滑窗法。放入Counter()特殊的字典，方便加减，通过字典记录和匹对
+class Solution:
+    def findSubstring(self, s: str, words: List[str]) -> List[int]:
+        index_list = []
+        length_s, length_words, length_one_word = len(s), len(words), len(words[0])       # ！
+        for index_one_word in range(length_one_word) :       # ！
+            if index_one_word + length_one_word * length_words > length_s :       # ！
+                break
+            accumulator = Counter()       # ！
+            for index_words in range(length_words) :
+                word = s[index_one_word + index_words * length_one_word : \
+                        index_one_word + (index_words + 1) * length_one_word]
+                accumulator[word] += 1
+            for index_words in range(length_words) :
+                word = words[index_words]
+                accumulator[word] -= 1       # ！永远的负值
+                if accumulator[word] == 0 :
+                    del accumulator[word]
+            for index in range(index_one_word, length_s - length_one_word * length_words + 1, length_one_word) :
+                if index != index_one_word :       # ！！第二次自己写和 0 比较。每一次index_one_word的最开始都要跳过
+                    word = s[index + (length_words - 1) * length_one_word : \
+                            index + length_words * length_one_word]       # ！删前取后，仅在s中
+                    accumulator[word] += 1
+                    if accumulator[word] == 0 :       # ！！第二次自己写，漏，word前后并不一样
+                        del accumulator[word]
+                    word = s[index - length_one_word : index]       # ！删前取后
+                    accumulator[word] -= 1
+                    if accumulator[word] == 0 :
+                        del accumulator[word]
+
+                if len(accumulator) == 0 :
+                    index_list.append(index)
+
+
+        return index_list
+
+
+# 31. 下一个排列
+# 一开始还以为，做数值列表，二分查找，二分排序
+class Solution:
+    def nextPermutation(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+
+        
+        for index in range(len(nums)) :
+            right = len(nums) - index - 1
+            left = right - 1 
+            if left >= 0 :
+                if right == len(nums) - 1 :
+                    if nums[left] < nums[right] :
+                        nums[left], nums[right] = nums[right], nums[left]
+                        break
+                if nums[left] >= nums[right] :       # ！
+                    continue
+                else :
+                    exchange_index = right       # ！
+                    for index_inner in range(right + 1, len(nums)) :
+                        if nums[index_inner] > nums[left]:
+                            exchange_index = index_inner       # ！没有 break
+                        elif nums[index_inner] <= nums[left] : break
+                    nums[left], nums[exchange_index] = nums[exchange_index], nums[left]       # ！
+                    
+                    nums_2_sort = nums[right:]       # ！ 不能直接 nums[right:].sort()
+                    nums_2_sort.sort()
+                    nums[right:] = nums_2_sort       # ！不能 对 nums 做一些操作。官方无法直接识别 + 
+                    break
+            else : nums.sort()
+
+
+
+
+# 32. 最长有效括号
+# 双指针 左到右 右到左
+class Solution:
+    def longestValidParentheses(self, s: str) -> int:
+        
+        if len(s) < 2 : return 0
+        max_len = 0
+        length = 0
+
+        left, right = 0, 0
+        for move in range(len(s)) :
+            if s[move] == '(' : left += 1
+            elif s[move] == ')' : right += 1
+            if right == left and right * 2 > max_len: max_len = right * 2       # ！ right * 2 > max_len 漏乘 2
+            elif right > left : left, right = 0, 0
+        left, right = 0, 0      # ！
+        for move in range(len(s) - 1, -1, -1) :      # ！
+            if s[move] == '(' : left += 1
+            elif s[move] == ')' : right += 1
+            if right == left and right * 2 > max_len: max_len = right * 2
+            elif right < left : left, right = 0, 0
+        return max_len
+
+
+
+
+# 自己写，逻辑不通，无法通过。想list.pop，记录max_len和index，想回头查找不符合的源头，从左到右，有些情况没法判断
+class Solution:
+    def longestValidParentheses(self, s: str) -> int:
+        
+        if len(s) < 2 : return 0
+        max_len = 0
+        max_len_start_index = 0 
+        record_list = []
+        length = 0
+
+        for move in range(len(s)) :
+            if s[move] == '(' :
+                record_list.append(move)
+
+            elif s[move] == ')' :
+                
+                if len(record_list) == 0 :
+                    continue
+                
+                max_len_start_index = record_list[-1]
+                record_list.pop()
+                length += 2
+
+        if len(record_list) != 0 :
+        return max_len

@@ -199,7 +199,27 @@ for i in range(n):
 这样只改变first 不改变head
 ```
 
+# 一般知识
 
+- mid = left + ((right - left) >> 1)       
+！运算顺序 先加法后移位   
+- Counter()特殊的字典，方便加减  
+- 不能直接 nums[right:].sort()   
+需要  
+nums_2_sort = nums[right:]    
+nums_2_sort.sort()    
+有序列表 反转的代码实现        
+```
+while left < right:
+            nums[left], nums[right] = nums[right], nums[left]
+            left += 1
+            right -= 1
+```
 
-# mid = left + ((right - left) >> 1)     
-！运算顺序 先加法后移位
+- 记录方式   
+dp    
+双指针    
+字典   
+Counter()     
+- 递减for     
+for move in range(len(s) - 1, -1, -1)    
