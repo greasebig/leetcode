@@ -222,4 +222,73 @@ dp
 字典   
 Counter()     
 - 递减for     
-for move in range(len(s) - 1, -1, -1)    
+for move in range(len(s) - 1, -1, -1)      
+- [dfs(index, path + [candidates[index]], target - candidates[index]) for index in range(start, length)]       # ！列表推导式需要变成 列表     
+
+
+- for while循环的条件变量不能在循环内部改变，会影响循环
+```
+错误示范
+for index in (start + 1, start + max_jump_length + 1):                             #!  start
+                if index > length - 1 :
+                    flag = 1
+                    break
+                if max_jump_length_local <= nums[index] :
+                    max_jump_length_local = nums[index]
+                    start = index                                    #!
+```
+
+## 列表创建
+- 错误例子 ： dp = [[False] * (n + 1)] * (m + 1)    
+正确例子： dp = [[False] * (n + 1) for _ in range(m + 1)]    
+在Python中，使用 * 运算符创建二维数组时，实际上是创建了多个引用指向相同的子列表。当你执行 dp = [[False] * (n + 1)] * (m + 1) 时，[False] * (n + 1) 创建了一个包含 n+1 个 False 的列表，并且使用 * (m + 1) 复制这个列表 m+1 次，从而创建了 m+1 个引用指向相同的子列表。     
+
+- 列表不能直接相减    
+```
+newlist = list(filter(lambda x: x not in little_list, nums))                          #！
+            for x in newlist :     
+
+错误例子
+nums - little_list
+```
+```
+在Python中，列表之间不能直接相减。但是，你可以使用一些方法来实现列表之间的差异操作。以下是一些方法：
+
+1.使用列表推导式：
+python
+Copy code
+list1 = [1, 2, 3, 4, 5]
+list2 = [3, 4, 5, 6, 7]
+
+result = [item for item in list1 if item not in list2]
+print(result)
+这将输出 [1, 2]，表示在list1中但不在list2中的元素。
+
+2.使用set进行差集操作：
+python
+Copy code
+list1 = [1, 2, 3, 4, 5]
+list2 = [3, 4, 5, 6, 7]
+
+set1 = set(list1)
+set2 = set(list2)
+
+result = list(set1 - set2)
+print(result)
+这也会输出 [1, 2]，通过将列表转换为集合，然后使用集合的差集操作。
+
+3.使用filter函数：
+python
+Copy code
+list1 = [1, 2, 3, 4, 5]
+list2 = [3, 4, 5, 6, 7]
+
+result = list(filter(lambda x: x not in list2, list1))
+print(result)
+同样，这也会输出 [1, 2]。
+```
+
+
+
+# 总结
+- 第10题，困难，一个星期后第二次写，很久才想起方法，但不理解，‘正则项匹配’        

@@ -330,6 +330,48 @@ class Solution:
         return new_num if flag>0 else -new_num
 
 
+
+# 
+class Solution:
+    def myAtoi(self, s: str) -> int:
+        number_list = []
+        is_bigger_than_0 = True              #！
+        has_symbol = stop = False              #！
+        table = ['0','1','2','3','4','5','6','7','8','9']
+        for index in range(len(s)) :
+            if has_symbol and s[index] not in table : break
+            if s[index] == ' ':
+                if stop :
+                    break
+                continue
+            elif s[index] == '.' :
+                break
+            elif not has_symbol and (s[index] == '-' or s[index] == '+') :              #！
+                if stop :
+                    break
+                is_bigger_than_0 = False if s[index] == '-' else True
+                has_symbol = True
+                continue
+            elif has_symbol and (s[index] == '-' or s[index] == '+') :              #！
+                break
+                
+            elif s[index] in table :
+                stop = True
+                number_list.append(s[index])
+            
+            elif not stop : break              #！
+            elif stop and s[index] not in table : break
+
+            
+
+        if not number_list : return 0              #！
+        number_str = ''.join(number_list)
+        number = int(number_str)              #！
+        if is_bigger_than_0 :
+            return 2 ** 31 - 1 if number > 2 ** 31 - 1 else number
+        else : return -2 ** 31 if -number < -2 ** 31 else -number
+
+
 # 9. 回文数
 class Solution:
     def isPalindrome(self, x: int) -> bool:
@@ -386,7 +428,7 @@ class Solution:
                         f[i][j] |= f[i - 1][j - 1] # 普通匹配
         return f[m][n]
 
-# 自己重写dp
+# 自己重写dp 222
 class Solution:
     def isMatch(self, s: str, p: str) -> bool: 
         m, n = len(s), len(p)
@@ -408,6 +450,51 @@ class Solution:
                 elif match(i,j):
                     dp[i][j] |= dp[i-1][j-1]
         return dp[-1][-1]  #！
+
+
+
+#  228 回头重写，方法忘记，记起又写不对
+class Solution:
+    def isMatch(self, s: str, p: str) -> bool:
+        m, n = len(s), len(p)
+        dp = [[False] * n] * m               #！
+        dp[0][0] = True
+        for i in range(1, m) :
+            for j in range(1, n) :
+                
+                if s[i] == p[j] or p[j] == '.' :
+                    dp[i][j] |= dp[i - 1][j - 1]
+                if p[j] == '*' :
+                    dp[i][j] |= dp[i][j - 2]
+                    if s[i] == p[j - 1] or p[j - 1] == '.' :
+                        dp[i][j - 1] |= dp[i - 1][j]              #！
+        return dp[-1][-1]
+
+# 228 更正
+class Solution:
+    def isMatch(self, s: str, p: str) -> bool:
+        m, n = len(s), len(p)
+        dp = [[False] * (n + 1) for _ in range(m + 1) ]             #！
+        dp[0][0] = True
+
+        def matches(i, j) : 
+            if i == 0 : return False             #！
+            elif s[i - 1] == p[j - 1] or p[j - 1] == '.' : return True
+
+        for i in range(m + 1) :             #！
+            for j in range(1, n + 1) :
+                if p[j - 1] == '*' :
+                    dp[i][j] |= dp[i][j - 2]
+                    if matches(i, j - 1) :             #！
+                        dp[i][j] |= dp[i - 1][j]             #！
+
+                elif matches(i, j) :
+                    dp[i][j] |= dp[i - 1][j - 1]
+                
+        return dp[-1][-1]
+
+
+
 
 
 # 自己无法通过的代码，Solution().isMatch("aaa","ab*a*c*a")，硬匹配
@@ -1465,3 +1552,627 @@ class Solution:
 
         if len(record_list) != 0 :
         return max_len
+
+
+
+# 33. 搜索旋转排序数组
+
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+
+        def find_2(left2, right2, target2) :
+            while left2 < right2 :     # ！
+                mid2 = (left2 + right2) // 2
+                if nums[mid2] == target2 : return mid2
+                elif nums[left2] == target2 : return left2
+                elif nums[right2] == target2 : return right2     # ！
+                elif nums[mid2] < target2 : 
+                    left2 = mid2 + 1
+                elif nums[mid2] > target2 :      # ！
+                    right2 = mid2 - 1
+            return -1
+
+
+        left = 0 
+        right = len(nums) - 1
+        while left <= right :     # ！
+            mid = (left + right) // 2
+            
+            if nums[mid] == target : return mid
+            
+            if nums[left] <= nums[mid] and nums[left] <= target and target <= nums[mid] :     # ！
+                return find_2(left, mid, target)
+
+            elif nums[mid] <= nums[right] and nums[mid] <= target and target <= nums[right] :     # ！
+                return find_2(mid, right, target)
+
+            elif nums[left] > nums[mid] :     # ！
+                right = mid - 1
+
+            elif nums[mid] > nums[right] :
+                left = mid + 1
+            else : return -1     # ！
+
+        return -1
+
+# 官方
+class Solution(object):
+    def search(self, nums, target):
+        if not nums:
+            return -1
+
+        left, right = 0, len(nums) - 1
+        while left <= right:
+            mid = (left + right) // 2
+            if target == nums[mid]:
+                return mid
+
+            if nums[left] <= nums[mid]:
+                if nums[left] <= target <= nums[mid]:
+                    right = mid - 1
+                else:
+                    left = mid + 1
+            else:
+                if nums[mid] <= target <= nums[right]:
+                    left = mid + 1
+                else:
+                    right = mid - 1
+        return -1
+
+
+# 34. 在排序数组中查找元素的第一个和最后一个位置
+class Solution:
+    def searchRange(self, nums: List[int], target: int) -> List[int]:
+        left = 0
+        right = len(nums) - 1
+        strat_end = [-1, -1]
+        while left <= right :     # ！
+            mid = (left + right) // 2
+            if nums[mid] == target :
+                start = mid
+                end = mid
+                while 1 :     # ！
+                    start -= 1
+                    if start >= 0 :     # ！
+                        if nums[start] != target:
+                            start += 1
+                            break
+                    else :     # ！
+                        start += 1
+                        break
+                while 1 :
+                    end += 1
+                    if end <= len(nums) - 1 :     # ！
+                        if nums[end] != target:
+                            end -= 1
+                            break   
+                    else :
+                        end -= 1
+                        break  
+                strat_end = [start, end]
+                break
+
+            elif nums[mid] > target :
+                right = mid - 1
+            elif nums[mid] < target :
+                left = mid + 1
+
+        return strat_end
+
+
+
+# 35. 搜索插入位置
+
+class Solution:
+    def searchInsert(self, nums: List[int], target: int) -> int:
+        left = 0
+        right = len(nums) - 1
+        while left <= right :
+            mid = (left + right) // 2
+            if nums[mid] == target :
+                return mid
+            elif nums[mid] < target :
+                left = mid + 1
+            elif nums[mid] > target :
+                right = mid - 1
+        return left
+
+
+
+
+# 36. 有效的数独
+class Solution:
+    def isValidSudoku(self, board: List[List[str]]) -> bool:
+        
+        for index_row in range(len(board)) :
+            row_counter = Counter()
+            for index_column in range(len(board[0])) :
+                if board[index_row][index_column] != '.' :
+                    row_counter[board[index_row][index_column]] += 1
+
+            has_duplicates = any(count > 1 for count in row_counter.values())
+            if has_duplicates:
+                return False
+
+        for index_column in range(len(board[0])) :
+            column_counter = Counter()
+            for index_row in range(len(board)) :
+                if board[index_row][index_column] != '.' :
+                    column_counter[board[index_row][index_column]] += 1
+
+            has_duplicates = any(count > 1 for count in column_counter.values())     # ！
+            if has_duplicates:
+                return False
+
+        for i in range(len(board) // 3) :
+            for j in range(len(board) // 3) :     # ！
+                nine_counter = Counter()     # ！
+                for index_row in range(3 * i, 3 * (i + 1)) :      # ！之前放置反了
+                    for index_column in range(3 * j, 3 * (j + 1)) :
+                        if board[index_row][index_column] != '.' :
+                            nine_counter[board[index_row][index_column]] += 1
+
+                has_duplicates = any(count > 1 for count in nine_counter.values())     # ！
+                if has_duplicates:
+                    return False
+
+        return True
+
+
+
+
+
+
+# 38. 外观数列
+class Solution:
+    def countAndSay(self, n: int) -> str:
+        
+        def read_number(number2) :
+            left = 0
+            result = ''
+            for right in range(left + 1, len(number2)) :      # ！
+                if number2[left] == number2[right] :
+                    continue
+                else :
+                    result += str(right - left) + number2[left]      # ！多加 1
+                    left = right
+            
+            result += str(right - left + 1) + number2[left]      # ！漏
+            return result
+        number = ''
+        for index in range(n) :
+            
+            if index == 0 :       # ！
+                number = '1'
+                
+            elif index == 1 : 
+                number = '11'
+                
+            else : number = read_number(number)
+        return number
+
+
+
+
+
+# 39. 组合总和
+# 官方
+class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        path, result, length = [], [], len(candidates)
+        def dfs(start, path, target) :                            # ！         
+            if target < 0 : return                    # ！ break 和 return 作用相同， 单纯 return 能提前结束运行             
+            elif target == 0 :
+                result.append(path)                                     # ！
+                return
+            [dfs(index, path + [candidates[index]], target - candidates[index]) for index in range(start, length)]                     # ！列表推导式需要变成 列表
+        dfs(0, path, target)
+        return result
+
+
+
+class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+
+        def dfs(candidates, begin, size, path, res, target):
+            if target == 0:
+                res.append(path)
+                return
+
+            for index in range(begin, size):
+                residue = target - candidates[index]
+                if residue < 0:
+                    break                    # ！ break 和 return 作用相同， 单纯 return 能提前结束运行
+
+                dfs(candidates, index, size, path + [candidates[index]], res, residue)
+
+        size = len(candidates)
+        if size == 0:
+            return []
+        candidates.sort()
+        path = []
+        res = []
+        dfs(candidates, 0, size, path, res, target)
+        return res
+
+
+
+
+# 自己写的，不通过，无法去重，无法找到所有，只能每一个开头找到一个满足的
+# 无法找到所有-这个可以解决。   无法去重-这个没法解决
+class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        result = []
+        
+        def dfs(number, candidates2) :
+            accumulator = 1
+            result_element = []
+            for index in range(len(candidates2)) :
+                minus = candidates2[index]
+                if minus > number :
+                    continue
+                accumulator = number - minus
+                is_leaf_node = flag_pass = False
+
+                if accumulator == 0 :
+                    return True, [minus], True
+                else : 
+                    if is_leaf_node : flag_pass, record_list, is_leaf_node = dfs(accumulator, candidates2[index + 1 :])
+                    else : flag_pass, record_list, is_leaf_node = dfs(accumulator,candidates2)
+
+                    if flag_pass :
+                        record_list.append(minus)
+                        if number == target : result.append(record_list)
+                        else : 
+                            if not result_element : 
+                                result_element.append(record_list)
+                            else :
+                                a.append(record_list) for a in result_element
+                if is_leaf_node : break
+
+            if not result_element : flag_pass = True
+            return flag_pass, result_element
+   
+            if number == target : return result
+            if accumulator != 0 : return False,[]
+            
+            
+        dfs(target)
+        return result
+
+
+# 40. 组合总和 II
+
+
+# 上题思路，别人的去重方法
+class Solution:
+    def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
+        path, result, length = [], [], len(candidates)
+        candidates.sort()               # ！
+        def dfs(start, path, target) :         
+            if target < 0 : return                         
+            elif target == 0 :
+                result.append(path)              # ！ 最关键，最方便
+                return              # ！
+            for index in range(start, length) :
+                if index > start and candidates[index] == candidates[index - 1] : continue               # ！index > 0 导致错误，导致缺少
+                dfs(index + 1, path + [candidates[index]], target - candidates[index]) 
+        dfs(0, path, target)
+        return result
+
+
+# 剪枝优化  
+class Solution:
+    def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
+        path, result, length = [], [], len(candidates)
+        candidates.sort()                      # ！
+        def dfs(start, path, target) :         
+            if target < 0 : return                         
+            elif target == 0 :
+                result.append(path)
+                return
+            for index in range(start, length) :
+                if index > start and candidates[index] == candidates[index - 1] : continue
+                if candidates[index] > target : break                                       # ！
+                dfs(index + 1, path + [candidates[index]], target - candidates[index]) 
+        dfs(0, path, target)
+        return result
+
+# 超出时间限制 
+class Solution:
+    def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
+        path, result, length = [], [], len(candidates)
+        def dfs(start, path, target) :         
+            if target < 0 : return                         
+            elif target == 0 :
+                path.sort()                 # ！
+                if path not in result :                 # ！
+                    result.append(path)
+                return
+            [dfs(index + 1, path + [candidates[index]], target - candidates[index]) for index in range(start, length)]                  # ！
+        dfs(0, path, target)
+        return result
+
+
+# 41. 缺失的第一个正数
+
+class Solution:
+    def firstMissingPositive(self, nums: List[int]) -> int:
+        n = len(nums)
+        for i in range(n) :
+            while 1 <= nums[i] <= n and nums[nums[i] - 1] != nums[i] :               # ！不能是 if 。while 保证交换后的另一个仍然满足，否则走过错过
+                nums[nums[i] - 1] , nums[i] = nums[i] , nums[nums[i] - 1]
+        for i in range(n) :
+            if nums[i] != i + 1 :
+                return i + 1
+        return n + 1
+
+print(Solution().firstMissingPositive([3,4,-1,1]))
+
+# 自己写逻辑不通
+class Solution:
+    def firstMissingPositive(self, nums: List[int]) -> int:
+        min_num = 1
+        right = False
+        flag = 0
+        for index in range(len(nums)) :
+            if nums[index] < 1 :
+                continue
+            if nums[index] >= 1 : 
+                flag += 1
+            if flag == 1 :
+                min_num = nums[index]
+
+
+# 42. 接雨水
+# 官方。双指针
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        volumn = left = max_left = max_right = 0
+        right = len(height) - 1
+        while left < right :
+            max_left = max(max_left, height[left])
+            max_right = max(max_right, height[right])
+            if height[left] < height[right] :
+                volumn += max_left - height[left]
+                left += 1
+            else : 
+                volumn += max_right - height[right]
+                right -= 1
+        return volumn
+
+# 超出时间限制。同时 if  判断太多，屎山
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        volumn = 0
+        highest_now = 0
+        length = len(height)
+        if length <= 2 : return 0
+        def find_highest(highest_local, start, end) :
+            
+            index_highest_local, highest_local = start, height[start]
+            for index in range(start, end) :
+                if index == start : pass
+                elif height[index] >= highest_local : 
+                    index_highest_local, highest_local = index, height[index]
+                    
+            return index_highest_local, highest_local
+
+        
+        def calculate_volumn(highest_local, start, end) :
+            nonlocal volumn, length
+            if start == 0 and end == length : 
+                index_highest, highest = find_highest(highest_local, start, end)
+                
+            flag = True
+            if start == 0 :
+                if start == end : return
+                
+                if start == 0 and end == length : 
+                    if index_highest == start : flag = not flag
+                else : index_highest = end
+                
+                if flag :     
+                    left, highest_2th_l = find_highest(highest_local, 0, index_highest) # find the closest left highest_2th
+                    
+                    volumn_l = highest_2th_l * (index_highest - left - 1)
+                    for j in range(left + 1, index_highest) :
+                        volumn_l -= height[j]
+
+                    volumn += volumn_l
+
+                    if left <= 1 and end != length : return
+                    
+                    calculate_volumn(highest_2th_l, start, left)
+
+            flag = True
+            if end == length :
+                if start == end : return
+                
+                if start == 0 and end == length : 
+                    if index_highest == end - 1 : flag = not flag
+                else : index_highest = start
+                
+                
+
+                if flag : 
+                    index_highest_local = index_highest + 1
+                    if index_highest_local > end - 1 : return
+                    highest_local = height[index_highest_local]
+                    for i in range(index_highest + 1, end) :   # find the closest right highest_2th
+                        if i == index_highest + 1 : pass
+                        elif height[i] > highest_local : 
+                            index_highest_local, highest_local = i, height[i]
+                    
+                    right, highest_2th_r = index_highest_local, highest_local
+                    
+                    #if right >= length - 1 and highest_2th_r > height[index_highest + 1] : pass # calculate final right
+                    #else : return
+
+                    
+                    volumn_r = highest_2th_r * (- index_highest + right - 1)
+                    for j in range(index_highest + 1, right) :
+                        volumn_r -= height[j]
+
+                    volumn += volumn_r
+
+                    if right >= length - 2 and start != 0 : return
+                    calculate_volumn(highest_2th_r, right, end)
+
+
+        
+        
+        calculate_volumn(highest_now, 0, length)
+        return volumn
+
+
+
+#43. 字符串相乘
+# 官方
+class Solution:
+    def multiply(self, num1: str, num2: str) -> str:
+        if num1 == '0' or num2 == '0' : return '0'                   #！
+        number1 = number2 = 0
+        m, n = len(num1), len(num2)
+        record = [0] * (m + n)                   #！长度估计
+        for i in range(len(num1) - 1 , -1, -1) :
+            number1 = int(num1[i])
+            for j in range(len(num2) - 1 , -1, -1) :
+                number2 = int(num2[j])                   #！复制粘贴错误
+                record[i + j + 1] += number1 * number2                   #！ +=      =
+        for i in range(m + n - 1, 0, -1) :
+            record[i - 1] += record[i] // 10
+            record[i] = record[i] % 10
+        index = 1 if record[0] == 0 else 0                   #！
+        result = ''.join(str(x) for x in record[index:])                   #！
+        
+        return result
+
+
+
+# 44. 通配符匹配
+# 复习第十题，并反复有实验 * 情况， 认真考虑 i = 0 时候
+class Solution:
+    def isMatch(self, s: str, p: str) -> bool:
+        m, n = len(s), len(p)
+        dp = [[False] * (n + 1) for _ in range(m + 1) ]
+        dp[0][0] = True
+
+        def matches(i, j):
+            if i == 0 : return False
+            elif s[i - 1] == p[j - 1] or p[j - 1] == '?' : return True
+
+        for i in range(m + 1):
+            for j in  range(1, n + 1):
+                if p[j - 1] == '*':
+                    dp[i][j] |= dp[i][j - 1]                  #！
+                    # if j <= i :dp[i][j] |= dp[j - 1][j - 1]
+                    dp[i][j] |= dp[i - 1][j]                              #！简单道理，却断点调试太久
+                    
+
+                elif matches(i, j):
+                    dp[i][j] |= dp[i - 1][j - 1]
+        return dp[-1][-1]  
+
+
+
+
+# 45. 跳跃游戏 II
+# 自己写  官方提示  看 两步的收益 now + future
+# if max2 <= nums[index] + index - start_init : max2 = nums[index] + index - start_init
+class Solution:
+    def jump(self, nums: List[int]) -> int:
+        
+        frequency = 0
+        length = len(nums)
+        if length == 1 :return 0
+        max_jump_length = nums[0]
+        start = 0
+        flag = 0
+        while 1 :
+            start_init = start
+            if start == 0 : 
+                max_jump_length_local = max_jump_length
+            end = start_init + max_jump_length_local + 1
+            max_one = -1
+            max2 = -1
+            for index in range(start_init + 1, end):
+                if index >= length - 1 :
+                    flag = 1
+                    break
+                if max2 <= nums[index] + index - start_init :
+                    #      未来步         已有步  官方答案省去 start_init 并作为列表末尾 判断标志
+                    max2 = nums[index] + index - start_init
+                    max_one = nums[index]
+                    start = index
+            frequency += 1
+            max_jump_length_local = max_one
+            if flag == 1 : break
+        
+        return frequency
+
+
+# 官方  抽象，变量少，变量名简洁
+class Solution:
+    def jump(self, nums: List[int]) -> int:
+        n = len(nums)
+        maxPos, end, step = 0, 0, 0                # 巧妙地初值设定和复用
+        for i in range(n - 1):
+            if maxPos >= i:
+                maxPos = max(maxPos, i + nums[i])
+                if i == end:
+                    end = maxPos
+                    step += 1
+        return step
+
+
+# 断点调试多次
+# 自己写的搜索 if max_one <= nums[index] : max_one = nums[index] 无法适应递减序列 [10,9,8,7,6,5,4,3,2,1,1,0]
+class Solution:
+    def jump(self, nums: List[int]) -> int:
+        
+        frequency = 0
+        length = len(nums)
+        if length == 1 :return 0
+        max_jump_length = nums[0]
+        start = 0
+        flag = 0
+        while 1 :
+            start_init = start
+            if start == 0 :                            #！
+                max_jump_length_local = max_jump_length
+            end = start_init + max_jump_length_local + 1                           #！
+            max_one = -1                           #！
+            for index in range(start_init + 1, end):                           #！
+                if index >= length - 1 :                           #！
+                    flag = 1
+                    break
+                if max_one <= nums[index] :                           #！
+                    max_one = nums[index]
+                    start = index
+            frequency += 1                           #！
+            max_jump_length_local = max_one                           #！
+            if flag == 1 : break                           #！
+        
+        return frequency
+
+
+# 46. 全排列
+class Solution:
+    def permute(self, nums: List[int]) -> List[List[int]]:
+
+        length = len(nums)
+        result = []
+        def f(depth, little_list) :                          #！
+            if depth == length :
+                result.append(little_list)
+                return
+            newlist = list(filter(lambda x: x not in little_list, nums))                          #！
+            for x in newlist :                          #！
+                if depth == 0 : little_list = []                          #！
+                
+                f(depth + 1, little_list + [x])                          #！
+
+        
+        f(0,[])
+        return result
