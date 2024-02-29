@@ -2485,7 +2485,7 @@ class Solution:
             
             else :  # 考虑 if sum_last
                 if nums[right] >= 0 :
-                    if sum_last >= 0 :
+                    if sum_last >= 0 :                  #！
                         if sum_max <= sum_last + nums[right] :
                             sum_max = sum_last + nums[right]
                         max_list = [left,right]
@@ -2497,21 +2497,21 @@ class Solution:
                         max_list = [left,right]
                         sum_last = nums[right]
 
-                elif nums[right] < 0 :
+                elif nums[right] < 0 :                  #！
                     if sum_last <= nums[right] :
                         left = right
                         if sum_max <= nums[right] :
                             sum_max = nums[right]
                         max_list = [left,right]
                         sum_last = nums[right]
-                    elif 0 >= sum_last > nums[right] : # 跳过 j 节点
+                    elif 0 >= sum_last > nums[right] : # 跳过 j 节点                  #！
                         left = right + 1
                         sum_last = 0
                         if left < len(nums) :
                             if sum_max <= sum_last + nums[left] :
                                 sum_max = sum_last + nums[left]
 
-                    elif sum_last > 0 :
+                    elif sum_last > 0 :                  #！
                         if sum_last + nums[right] < 0 : # 跳过 j 节点
                             left = right + 1
                             sum_last = 0
