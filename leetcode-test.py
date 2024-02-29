@@ -2328,3 +2328,199 @@ class Solution:
 
 # 自己想用set()或集合，集合套集合，键不能说集合，无法哈希，但是不是集合自己就不知道怎么设计区别差异
 #。或者用Counter计数，不知道思路
+
+
+
+# 50. Pow(x, n)
+# 方法同之前的 写出整除的代码。快速幂 + 迭代
+class Solution:
+    def myPow(self, x: float, n: int) -> float:
+        result = 1
+        if n < 0 : x, n = 1/x, -n
+        while n > 0 :
+            if n & 1 == 1 :
+                result = result * x
+            
+            x = x * x
+            n = n >> 1
+        return result 
+# 时间复杂度：O(log⁡n)，即为对 nnn 进行二进制拆分的时间复杂度。
+# 空间复杂度：O(1)
+
+
+
+# 官方 快速幂 + 递归
+class Solution:
+    def myPow(self, x: float, n: int) -> float:
+        def quickMul(N):
+            if N == 0:
+                return 1.0
+            y = quickMul(N // 2)
+            return y * y if N % 2 == 0 else y * y * x
+        
+        return quickMul(n) if n >= 0 else 1.0 / quickMul(-n)
+
+# 时间复杂度：O(log⁡n)，即为递归的层数。
+# 空间复杂度：O(log⁡n)，即为递归的层数。这是由于递归的函数调用会使用栈空间。
+
+
+# 51. N 皇后
+
+# 官方 由于每个皇后必须位于不同列，因此已经放置的皇后所在的列不能放置别的皇后。第一个皇后有 NNN 列可以选择，
+# 第二个皇后最多有 N−1N-1N−1 列可以选择，第三个皇后最多有 N−2N-2N−2 列可以选择
+# 方向1 同一条斜线上的每个位置满足行下标与列下标之差相等，例如 (0,0)(0,0)(0,0) 和 (3,3)(3,3)(3,3) 在同一条方向一的斜线上
+# 方向二的斜线为从右上到左下方向，同一条斜线上的每个位置满足行下标与列下标之和相等
+class Solution:
+    def solveNQueens(self, n: int) -> List[List[str]]:
+        def generateBoard():
+            board = list()
+            for i in range(n):
+                row[queens[i]] = "Q"
+                board.append("".join(row))
+                row[queens[i]] = "."                   #！
+            return board
+
+        def backtrack(row: int):
+            if row == n:
+                board = generateBoard()                   #！
+                solutions.append(board)
+            else:
+                for i in range(n):
+                    if i in columns or row - i in diagonal1 or row + i in diagonal2:                   #！
+                        continue
+                    queens[row] = i                   #！
+                    columns.add(i)                   #！
+                    diagonal1.add(row - i)                   #！
+                    diagonal2.add(row + i)                   #！
+                    backtrack(row + 1)
+                    columns.remove(i)
+                    diagonal1.remove(row - i)
+                    diagonal2.remove(row + i)
+                    
+        solutions = list()
+        queens = [-1] * n                   #！
+        columns = set()                   #！
+        diagonal1 = set()
+        diagonal2 = set()
+        row = ["."] * n
+        backtrack(0)
+        return solutions
+
+
+
+
+
+
+# 自己写的，用时277ms.久
+# 直观的做法是暴力枚举将 NNN 个皇后放置在 N×NN \times NN×N 的棋盘上的所有可能的情况，并对每一种情况判断是否满足皇后彼此之间不相互攻击。
+# 暴力枚举的时间复杂度是非常高的，因此必须利用限制条件加以优化。
+
+# 使用 table 记录， 并使用deepcopy , 
+    def solveNQueens(self, n: int) -> List[List[str]]:
+        if n == 1 : return [['Q']]
+        def unaccessable_table(table2, j, k) :                   #！
+            flag = False
+            for little_j in range(n) :
+                table2[little_j][k] = flag
+                table2[j][little_j] = flag
+                if j + little_j < n and k + little_j < n :                   #！
+                    table2[j + little_j][k + little_j] = flag
+                if j - little_j >= 0  and k - little_j >= 0 :
+                    table2[j - little_j][k - little_j] = flag
+                if j + little_j < n and k - little_j >= 0 :
+                    table2[j + little_j][k - little_j] = flag
+                if j - little_j >= 0  and k + little_j < n :
+                    table2[j - little_j][k + little_j] = flag
+
+            return table2
+
+
+        record = []
+        def nqueen(depth, start, table, path) :                   #！
+            if depth == n : 
+                record.append(path[:])                   #！
+                return
+            for j in range(start, start + 1) :                   #！
+
+                for k in range(0, n) :                   #！
+                    if table[j][k]:                   #！
+                        
+                        inner_string = ''
+                        for inner in range(n):                   #！
+                            if inner == k :
+                                inner_string += 'Q'
+                            else: inner_string += '.'
+
+                        path.append(inner_string)
+                        table_copy =  copy.deepcopy(table)                   #！
+                        table_copy =  unaccessable_table(table_copy, j, k)
+
+                        nqueen(depth + 1, start + 1, table_copy, path)                   #！
+
+                        path.pop()                   #！
+
+        table = [[True] * n for _ in range(n)]
+        
+        nqueen(0, 0, table, [])
+        return record
+
+
+
+# 53. 最大子数组和
+# 耗时两个半左右。规则写到人麻
+class Solution:
+    def maxSubArray(self, nums: List[int]) -> int:
+        max_list = []
+        left = 0
+        right = 0
+        sum_max = sum_now = sum_last = 0
+        while right < len(nums) and left < len(nums):
+            if right == 0 : 
+                max_list = [0,0]
+                sum_now = nums[right]
+                sum_max = sum_now
+                sum_last = sum_now
+            
+            
+            
+            else :  # 考虑 if sum_last
+                if nums[right] >= 0 :
+                    if sum_last >= 0 :
+                        if sum_max <= sum_last + nums[right] :
+                            sum_max = sum_last + nums[right]
+                        max_list = [left,right]
+                        sum_last = sum_last + nums[right]
+                    elif sum_last < 0 :
+                        left = right
+                        if sum_max <= nums[right] :
+                            sum_max = nums[right]
+                        max_list = [left,right]
+                        sum_last = nums[right]
+
+                elif nums[right] < 0 :
+                    if sum_last <= nums[right] :
+                        left = right
+                        if sum_max <= nums[right] :
+                            sum_max = nums[right]
+                        max_list = [left,right]
+                        sum_last = nums[right]
+                    elif 0 >= sum_last > nums[right] : # 跳过 j 节点
+                        left = right + 1
+                        sum_last = 0
+                        if left < len(nums) :
+                            if sum_max <= sum_last + nums[left] :
+                                sum_max = sum_last + nums[left]
+
+                    elif sum_last > 0 :
+                        if sum_last + nums[right] < 0 : # 跳过 j 节点
+                            left = right + 1
+                            sum_last = 0
+                            if left < len(nums) :
+                                if sum_max <= sum_last + nums[left] :
+                                    sum_max = sum_last + nums[left]
+                        elif sum_last + nums[right] >= 0 : # 还是可以又收益
+                            sum_last = sum_last + nums[right]
+
+            right += 1
+                
+        return sum_max

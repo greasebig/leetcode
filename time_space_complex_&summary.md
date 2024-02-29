@@ -22,6 +22,42 @@ print(solu.lengthOfLongestSubstring("pwwkew"))
 - 空间复杂度  
 使用了一个字典 char_record_map 来记录每个字符最后一次出现的位置。在最坏的情况下，所有字符都不重复，此时字典的大小会达到字符串的长度。因此，空间复杂度是 O(n)，其中 n 是输入字符串的长度。额外使用了几个整数变量，但它们的空间占用是常量级别的，不会随着输入规模增加而变化。
 
+
+```
+# 50. Pow(x, n)
+# 方法同之前的 写出整除的代码。快速幂 + 迭代
+class Solution:
+    def myPow(self, x: float, n: int) -> float:
+        result = 1
+        if n < 0 : x, n = 1/x, -n
+        while n > 0 :
+            if n & 1 == 1 :
+                result = result * x
+            
+            x = x * x
+            n = n >> 1
+        return result 
+# 时间复杂度：O(log⁡n)，即为对 nnn 进行二进制拆分的时间复杂度。
+# 空间复杂度：O(1)
+
+
+
+# 官方 快速幂 + 递归
+class Solution:
+    def myPow(self, x: float, n: int) -> float:
+        def quickMul(N):
+            if N == 0:
+                return 1.0
+            y = quickMul(N // 2)
+            return y * y if N % 2 == 0 else y * y * x
+        
+        return quickMul(n) if n >= 0 else 1.0 / quickMul(-n)
+
+# 时间复杂度：O(log⁡n)，即为递归的层数。
+# 空间复杂度：O(log⁡n)，即为递归的层数。这是由于递归的函数调用会使用栈空间。
+```
+
+
 ## 递归算法 计算阶乘 n!
 ```python
 def factorial(n):
