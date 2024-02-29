@@ -2176,3 +2176,155 @@ class Solution:
         
         f(0,[])
         return result
+
+# 官方 动态维护，前处理后还原，更少变量，且不需要filter查找
+class Solution:
+    def permute(self, nums):
+        def backtrack(first = 0):
+            # 所有数都填完了
+            if first == n:  
+                res.append(nums[:])
+            for i in range(first, n):
+                # 动态维护数组
+                nums[first], nums[i] = nums[i], nums[first]
+                # 继续递归填下一个数
+                backtrack(first + 1)
+                # 撤销操作
+                nums[first], nums[i] = nums[i], nums[first]
+        
+        n = len(nums)
+        res = []
+        backtrack()
+        return res
+
+
+# 47. 全排列 II
+
+class Solution:
+# 官方 used[]
+    def permuteUnique(self, nums: List[int]) -> List[List[int]]:
+
+        def dfs(nums, size, depth, path, used, res):
+            if depth == size:
+                res.append(path.copy())
+                return
+            for i in range(size):
+                if not used[i]:
+
+                    if i > 0 and nums[i] == nums[i - 1] and not used[i - 1]:
+                        continue
+
+                    used[i] = True
+                    path.append(nums[i])
+                    dfs(nums, size, depth + 1, path, used, res)
+                    used[i] = False
+                    path.pop()
+
+        size = len(nums)
+        if size == 0:
+            return []
+
+        nums.sort()
+
+        used = [False] * len(nums)
+        res = []
+        dfs(nums, size, 0, [], used, res)
+        return res
+
+
+# 自己重写官方
+class Solution:
+    def permuteUnique(self, nums: List[int]) -> List[List[int]]:
+        res = []
+        length = len(nums)
+        
+        def dfs(depth, path, used):
+            if depth == length :
+                res.append(path[:])
+                return
+            for j in range(0, length) :                       #！
+                if not used[j] :                       #！used 两个作用 1.遍历 全排列
+                    if j > 0 and nums[j] == nums[j - 1] and not used[j - 1]: continue                       #！ 2. 剪枝去重，重复相同，相同但未使用过的，减去 
+
+                    path.append(nums[j])
+                    used[j] = True
+                    dfs(depth + 1, path, used)
+                    used[j] = False                       #！
+                    path.pop()                       #！
+
+
+        nums.sort()                       #！
+        used = [False] * length                       #！
+        
+        dfs(0, [], used)
+        return res
+
+# 自己写，15倍时间于原答案
+class Solution:
+    def permuteUnique(self, nums: List[int]) -> List[List[int]]:
+        res = []
+        n = len(nums)
+        def back(first) :
+            if first == n :
+                if nums not in res :                       #！这样搜索耗时极久
+                    res.append(nums[:])                          #！创建副本。但 res.append(nums)  修改原指针位置
+                    return
+            for i in range(first, n) :
+                nums[i], nums[first] = nums[first], nums[i]
+                back(first + 1)
+                nums[i], nums[first] = nums[first], nums[i]
+
+        back(0)
+        return res
+
+
+
+# 48. 旋转图像
+# 旋转所有圈
+class Solution:
+    def rotate(self, matrix: List[List[int]]) -> None:
+        """
+        Do not return anything, modify matrix in-place instead.
+        """
+
+        row = column = len(matrix) - 1
+        if row == 1 :
+            for j in range(row) :
+                matrix[0][j], matrix[j][row], matrix[row][row - j], matrix[row - j][0] = \
+                matrix[row - j][0], matrix[0][j], matrix[j][row], matrix[row][row - j]
+
+        for inner_outer in range(row - 1) :
+
+            for j in range(inner_outer, row - inner_outer) :
+                matrix[inner_outer][j], matrix[j][row - inner_outer], \
+                matrix[row - inner_outer][row - j], matrix[row - j][inner_outer] = \
+                \
+                matrix[row - j][inner_outer], matrix[inner_outer][j], \
+                matrix[j][row - inner_outer], matrix[row - inner_outer][row - j]
+
+
+# 只旋转最外围
+row = column = len(matrix) - 1
+for j in range(row) :
+    matrix[0][j], matrix[j][row], matrix[row][row - j], matrix[row - j][0] = \
+    matrix[row - j][0], matrix[0][j], matrix[j][row], matrix[row][row - j]
+
+
+
+
+
+
+# 49. 字母异位词分组
+class Solution:
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        mp = collections.defaultdict(list)                      #！mp是一个字典，其中每个键对应一个空列表
+        for word in strs :
+            sequence = [0] * 26                      #！
+            for char in word :
+                sequence[ord(char) - ord('a')] += 1                      #！
+            mp[tuple(sequence)].append(word)                      #！ tuple才可哈希，通过26字母位置进行计数
+
+        return list(mp.values())                      #！
+
+# 自己想用set()或集合，集合套集合，键不能说集合，无法哈希，但是不是集合自己就不知道怎么设计区别差异
+#。或者用Counter计数，不知道思路

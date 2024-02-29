@@ -287,8 +287,13 @@ result = list(filter(lambda x: x not in list2, list1))
 print(result)
 同样，这也会输出 [1, 2]。
 ```
+- if nums not in res :                       ！这样搜索耗时极久   
+- res.append(nums[:])              ！创建副本append 。但 res.append(nums)  修改原指针位置     
+另外一种创建副本  res.append(path.copy())      
 
-
+- tuple才可哈希，其也是有序的     
+键不能说集合，无法哈希      
+set()通过add()加元素     
 
 # 总结
 - 第10题，困难，一个星期后第二次写，很久才想起方法，但不理解，‘正则项匹配’        
