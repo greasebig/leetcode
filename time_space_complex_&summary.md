@@ -274,6 +274,20 @@ for index in (start + 1, start + max_jump_length + 1):                          
                     start = index                                    #!
 ```
 
+- lambda    
+intervals = [[1,3],[2,6],[8,10],[15,18]]    
+intervals.sort(key = lambda x : x[0])    
+
+newlist = list(filter(lambda x: x not in little_list, nums))      
+
+- matrix = list(zip(*matrix))[::-1]    
+[(7, 11), (6, 10), (5, 9)]     
+[(7, 6, 5), (11, 10, 9)]     
+[[5, 6, 7, 8], [9, 10, 11, 12]]
+[(5, 9), (6, 10), (7, 11), (8, 12)]
+zip(*matrix): zip 函数用于将多个可迭代对象中的对应元素打包成元组。在这里，*matrix 将二维矩阵的列解压缩为单独的参数，然后 zip 将这些列元素打包成元组。这样就完成了矩阵的转置操作。      
+
+
 ## 列表创建
 - 错误例子 ： dp = [[False] * (n + 1)] * (m + 1)    
 正确例子： dp = [[False] * (n + 1) for _ in range(m + 1)]    

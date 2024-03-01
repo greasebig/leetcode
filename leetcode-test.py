@@ -2467,6 +2467,22 @@ class Solution:
 
 
 # 53. 最大子数组和
+# 官方 动规
+class Solution:
+    def maxSubArray(self, nums: List[int]) -> int:
+        length = len(nums)
+        dp = [0] * length
+        dp[0] = nums[0]
+        for j in range(1,length) :
+            if dp[j - 1] >= 0 :
+                dp[j] = dp[j - 1] + nums[j]
+            elif dp[j - 1] < 0 :
+                dp[j] = nums[j]
+        return max(dp) 
+
+# 官方法二，分治。即折半查找，中间扩散
+
+
 # 耗时两个半左右。规则写到人麻
 class Solution:
     def maxSubArray(self, nums: List[int]) -> int:
@@ -2524,3 +2540,196 @@ class Solution:
             right += 1
                 
         return sum_max
+
+
+
+# 54. 螺旋矩阵
+
+class Solution:
+    def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
+        
+        result = []
+        
+        def outer_count(matrix) :
+            
+            m, n = len(matrix), len(matrix[0])
+
+            if m == 1 :
+                for j in range(n) :
+                    result.append(matrix[0][j])
+            elif n == 1 :
+                for k in range(0, m): 
+                    result.append(matrix[k][n - 1])
+            else :
+                for j in range(n) :
+                    result.append(matrix[0][j])
+                for k in range(1, m): 
+                    result.append(matrix[k][n - 1])
+                for j in range(n - 2, -1, -1) :
+                    result.append(matrix[m - 1][j])
+                for k in range(m - 2, 0, -1) :
+                    result.append(matrix[k][0])
+
+            if n - 1 <= 1 or m - 1 <= 1 : return
+            inner_matrix = [row[1:n-1] for row in matrix[1:m-1]]
+            outer_count(inner_matrix)
+
+        outer_count(matrix)
+        return result
+
+class Solution:
+    def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
+        res = []
+        while matrix:
+            res += matrix.pop(0)
+            matrix = list(zip(*matrix))[::-1]                  #！
+        return res
+
+# 56. 合并区间
+
+intervals.sort(key = lambda x : x[0])
+
+
+# 61. 旋转链表
+
+class Solution:
+    def rotateRight(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
+        if k == 0 : return head
+        
+        head2 = head
+        dummy = ListNode(0, head)
+        length = 0
+        while head2 :
+            length += 1
+            head2 = head2.next
+        if length <= 1 : return head                 #！
+
+        move_length  = length - k % length
+        if length == move_length : return head                 #！
+        move_length2 = move_length                #！
+        
+        head2 = head                #！
+        while head2 :
+            if move_length == 1 :                 #！if 放末尾导致错误
+                node_final = head2
+                head2 = head2.next
+                node_final.next = None
+                break
+            move_length -= 1
+            head2 = head2.next
+                    
+        dummy.next = head2                #！
+        count = length - move_length2                #！
+        while head2 : 
+            
+            if count == 1 :                 #！
+                head2.next = head
+                break
+            count -= 1
+            head2 = head2.next
+            
+        return dummy.next
+
+
+
+
+
+# 62. 不同路径
+
+# 官方 动规
+class Solution:
+    def uniquePaths(self, m: int, n: int) -> int:        
+        dp = [[1] * n for _ in range(m)]
+        for j in range(1, m) :
+            for k in range(1, n) :
+                dp[j][k] = dp[j -1][k] + dp[j][k -1]
+        return dp[-1][-1]
+
+# 组合方法
+class Solution {
+public:
+    int uniquePaths(int m, int n) {
+        long long ans = 1;
+        for (int x = n, y = 1; y < m; ++x, ++y) {
+            ans = ans * x / y;
+        }
+        return ans;
+    }
+};
+
+
+
+# s深度优先搜索，超时，想剪枝找不到规律
+class Solution:
+    def uniquePaths(self, m: int, n: int) -> int:
+        
+        number = 0
+        def robot(place) :
+            nonlocal number
+            if place == [m - 1, n - 1] :
+                number += 1
+            if place[0] + 1 < m :
+                robot([place[0] + 1, place[1]])
+            if place[1] + 1 < n :
+                robot([place[0], place[1] + 1])
+        robot([0, 0])
+        return number
+
+
+
+# 63. 不同路径 II
+class Solution:
+    def uniquePathsWithObstacles(self, obstacleGrid: List[List[int]]) -> int:
+        m, n = len(obstacleGrid), len(obstacleGrid[0])
+        
+        dp = [[1] * n for _ in range(m)]
+        
+
+        for j in range(m) :
+            if obstacleGrid[j][0] == 1 :
+                dp[j][0] = 0
+                if j + 1 < m :
+                    obstacleGrid[j + 1][0] = 1
+        for k in range(n) :
+            if obstacleGrid[0][k] == 1 :
+                dp[0][k] = 0
+                if k + 1 < n :
+                    obstacleGrid[0][k + 1] = 1
+
+        for j in range(1, m) :
+            for k in range(1, n) :
+                if obstacleGrid[j][k] == 1 :
+                    dp[j][k] = 0
+                else :
+                    dp[j][k] = dp[j -1][k] + dp[j][k -1]
+        return dp[-1][-1]
+
+
+
+# 64. 最小路径和
+# 自己想dp如何加，和63一样把左 上数加在一起？
+# 自己想不出。经提示
+class Solution:
+    def minPathSum(self, grid: List[List[int]]) -> int:
+        
+        m, n = len(grid), len(grid[0])
+        
+        dp = [[0] * n for _ in range(m)]
+        
+        dp[0][0] = grid[0][0]
+        for j in range(1, m) :
+            dp[j][0] = grid[j][0] + dp[j - 1][0]
+        for k in range(1, n) :
+            dp[0][k] = grid[0][k] + dp[0][k - 1]
+
+        for j in range(1, m) :
+            for k in range(1, n) :
+                dp[j][k] = grid[j][k] + min(dp[j - 1][k] , dp[j][k - 1])
+
+        return dp[-1][-1]
+
+
+
+
+
+
