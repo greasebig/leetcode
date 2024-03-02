@@ -2777,4 +2777,75 @@ class Solution:
         return dp[-1][-1]
 
 
+# 322. 零钱兑换
+# 最优解
+# 答案提示找出 min() + 1  类似，走楼梯，走台阶，路径和最短 64
+# 自己写 
+class Solution:
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        dp = [0] * (amount + 1)
+        for i in range(1, amount + 1):
+            record = []
+            
+            for j in range(len(coins)) :
+                if i - coins[j] < 0 : 
+                    record.append(float('inf'))
+                else :
+                    record.append(dp[i - coins[j]] + 1)
+            
+            dp[i] = min(record)
+        return -1 if dp[amount] == float('inf') else dp[amount]
+
+
+
+# 518. 零钱兑换 II
+# 方案数。可重复元素，由小到大排序后不可重复。不讲究顺序，只讲究各元素个数的不重复性
+# 70题 走楼梯。可重复元素，由小到大排序后可重复，每个元素放的位置具有独立性，排列，讲究先后顺序
+# 不知道怎么去重
+# 自己写的外层是 钱额， 内层是 硬币，无法去重，得到
+class Solution:
+    def change(self, amount: int, coins: List[int]) -> int:
+        dp = [0] * (amount + 1)
+        dp[0] = 1
+        for coin in coins :
+            for j in range(coin, amount + 1):
+                dp[j] = dp[j - coin] + dp[j]
+        return dp[-1]
+
+
+# 70. 爬楼梯
+# 惯性思维不会写，套不进去
+# f(x)=f(x−1)+f(x−2)
+
+
+
+# 72. 编辑距离
+# 经过提示 转移状态公式后自己写
+# 字符串每次取一点儿，.小状态，初始开始慢慢转移。自己也是这种思路但找不到规律
+# 最优解。min
+class Solution:
+    def minDistance(self, word1: str, word2: str) -> int:
+        m, n = len(word1), len(word2)
+        dp = [[0] * (n + 1) for _ in range(m + 1)]                # 中括号 老是放错
+        for j in range(m) :
+            dp[j + 1][0] = j + 1
+        for j in range(n) :
+            dp[0][j + 1] = j + 1
+        for j in range(1, m + 1) :
+            for k in range(1, n + 1) :
+                if word1[j - 1] == word2[k - 1] :
+                    dp[j][k] = 1 + min(dp[j - 1][k], dp[j][k - 1], dp[j - 1][k - 1] - 1)                 #
+                else :
+                    dp[j][k] = 1 + min(dp[j - 1][k], dp[j][k - 1], dp[j - 1][k - 1])
+        return dp[-1][-1] 
+
+
+
+
+
+
+
+
+
+
 
