@@ -293,6 +293,41 @@ zip(*matrix): zip 函数用于将多个可迭代对象中的对应元素打包�
 正确例子： dp = [[False] * (n + 1) for _ in range(m + 1)]    
 在Python中，使用 * 运算符创建二维数组时，实际上是创建了多个引用指向相同的子列表。当你执行 dp = [[False] * (n + 1)] * (m + 1) 时，[False] * (n + 1) 创建了一个包含 n+1 个 False 的列表，并且使用 * (m + 1) 复制这个列表 m+1 次，从而创建了 m+1 个引用指向相同的子列表。     
 
+```
+dp = [[False] * (target + 1) for _ in range(length)]
+dp2 = [[False * (target + 1)] for _ in range(length)]
+
+dp
+[[False, False, False, False, False, False, False, False, False, False, False, False], [False, False, False, False, False, False, False, False, False, False, False, False], [False, False, False, False, False, False, False, False, False, False, False, False], [False, False, False, False, False, False, False, False, False, False, False, False]]
+
+dp2
+[[0], [0], [0], [0]]
+
+
+
+dp3 = [0] * (5 + 1)
+dp3[2] = 1 
+这样生成的并没有指向同一个
+
+
+- 错误例子 ： dp = [[False] * (n + 1)] * (m + 1)    
+指向同一个
+dp4 = [[False] * (3 + 1)] * (6 + 1)    
+dp4[2] = True
+[[False, False, False, False], [False, False, False, False], True, [False, False, False, False], [False, False, False, False], [False, False, False, False], [False, False, False, False]]
+
+dp4 = [[False] * (3 + 1)] * (6 + 1)    
+dp4[2][2] = True
+[[False, False, True, False], [False, False, True, False], [False, False, True, False], [False, False, True, False], [False, False, True, False], [False, False, True, False], [False, False, True, False]]
+
+
+正确例子： dp = [[False] * (n + 1) for _ in range(m + 1)]   
+没有指向同一个
+
+
+
+```
+
 - 列表不能直接相减    
 ```
 newlist = list(filter(lambda x: x not in little_list, nums))                          #！
@@ -344,6 +379,10 @@ print(result)
 - tuple才可哈希，其也是有序的     
 键不能说集合，无法哈希      
 set()通过add()加元素     
+
+
+- 动规
+动态规划的题目分为两大类，一种是求最优解类，典型问题是背包问题，另一种就是计数类，比如这里的统计方案数的问题，它们都存在一定的递推性质。前者的递推性质还有一个名字，叫做 「最优子结构」 ——即当前问题的最优解取决于子问题的最优解，后者类似，当前问题的方案数取决于子问题的方案数。所以在遇到求方案数的问题时，我们可以往动态规划的方向考虑。     
 
 # 总结
 - 第10题，困难，一个星期后第二次写，很久才想起方法，但不理解，‘正则项匹配’        

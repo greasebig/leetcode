@@ -2678,6 +2678,7 @@ class Solution:
 
 
 # 63. 不同路径 II
+# 可以优化用一维数组 f[0] 滚动数组
 class Solution:
     def uniquePathsWithObstacles(self, obstacleGrid: List[List[int]]) -> int:
         m, n = len(obstacleGrid), len(obstacleGrid[0])
@@ -2730,6 +2731,50 @@ class Solution:
 
 
 
+# 动态规划的题目分为两大类，一种是求最优解类（以下），典型问题是背包问题，另一种就是计数类（以上），
+# 比如这里的统计方案数的问题，它们都存在一定的递推性质。前者的递推性质还有一个名字，
+# 叫做 「最优子结构」 ——即当前问题的最优解取决于子问题的最优解，后者类似，
+# 当前问题的方案数取决于子问题的方案数。所以在遇到求方案数的问题时，我们可以往动态规划的方向考虑。
+
+
+
+
+
+
+
+
+
+
+# 416. 分割等和子集
+# 看答案看了挺久。初级背包问题
+class Solution:
+    def canPartition(self, nums: List[int]) -> bool:
+                
+        sumall = sum(nums)
+        if sumall & 1 == 1 : return False
+
+        target = sumall >> 1
+        max_num = max(nums)
+        if max_num > target : return False
+
+        length = len(nums)
+        if length <= 1 : return False
+
+        dp = [[False] * (target + 1) for _ in range(length)]
+
+        for j in range(length) :
+            dp[j][0] = True
+
+        dp[0][nums[0]] = True
+
+        for j in range(length) :
+            for k  in range(1,target + 1) :
+                if k >= nums[j] :
+                    dp[j][k] = dp[j - 1][k] | dp[j - 1][k - nums[j]]
+                elif k < nums[j] :
+                    dp[j][k] = dp[j - 1][k]
+
+        return dp[-1][-1]
 
 
 
