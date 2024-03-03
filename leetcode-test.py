@@ -2843,9 +2843,254 @@ class Solution:
 
 
 
+# 75. 颜色分类
+# 双指针，官方
+class Solution:
+    def sortColors(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        zero = 0
+        one = 0
+        for j in range(len(nums)) :
+            if nums[j] == 1 :
+                nums[j], nums[one] = nums[one], nums[j]
+                one += 1
+            elif nums[j] == 0 :
+                nums[j], nums[zero] = nums[zero], nums[j]
+                if zero < one :
+                    nums[j], nums[one] = nums[one], nums[j]
+                one += 1
+                zero += 1
+
+
+# 自己写，逻辑不自洽
+class Solution:
+    def sortColors(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        zero = 0
+        one = 0
+        two = 0
+        for j in range(len(nums)) :
+            if nums[j] == 0 :
+                zero += 1
+            elif nums[j] == 1 :
+                one += 1
+            elif nums[j] == 2 :
+                two += 1
+        nums[0:zero]  = 0
+
+        for j in range(1, len(nums)) :
+            if nums[j] >= nums[j - 1] :
+                continue
+            elif nums[j] < nums[0] :
+                nums[j], nums[0] = nums[0], nums[j]
 
 
 
 
 
 
+
+# 76. 最小覆盖子串
+# 首先确定是 dp 。但是不会状态转移，更加不会如何提取最小字串
+# 不是 dp。是双指针，用来提取子串
+class Solution:
+    def minWindow(self, s: str, t: str) -> str:
+
+        t_counter = Counter()
+        s_counter = Counter()
+        for t_char in t :
+            t_counter[t_char] += 1
+
+        left = 0
+        right = -1
+
+        min_length = float('inf')
+        result_str = ''
+
+        def check() :
+            for t_key, t_value in t_counter.items() :                     #！
+                if s_counter[t_key] < t_value :
+                    return False
+            return True
+
+        while right < len(s) :
+
+            if check() :
+                
+                length = right - left + 1
+                if length < min_length :
+                    result_str = s[left : right + 1]
+                    min_length = length
+                
+                s_counter[s[left]] -= 1                         #！
+                left += 1
+   
+            else :
+                right += 1                     #！
+                if right == len(s) :                     #！
+                    continue
+                s_counter[s[right]] += 1
+                                
+        return result_str
+
+
+
+
+
+# 官方
+class Solution:
+    def minWindow(self, s: str, t: str) -> str:
+
+        t_counter = Counter()
+        s_counter = Counter()
+        for t_char in t :
+            t_counter[t_char] += 1
+
+        left = 0
+        right = -1
+
+        min_length = float('inf')
+        result_str = ''
+
+        def check() :
+            for t_key, t_value in t_counter.items() :
+                if s_counter[t_key] < t_value :
+                    return False
+            return True
+
+        while right < len(s) - 1:
+            right += 1
+            if s[right] in t_counter :                   #！t_counter写错
+                s_counter[s[right]] += 1
+
+            while check() and left <= right :                   #！=
+                
+                length = right - left + 1
+                if length < min_length :
+                    result_str = s[left : right + 1]
+                    min_length = length
+                
+                if s[left] in t_counter :                   #！
+                    s_counter[s[left]] -= 1
+
+                left += 1
+
+
+        return result_str
+
+
+
+
+
+# 78. 子集
+# 想不出
+# 多个答案才看懂在干什么
+# 每一行都过于巧妙
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        result = []
+        length = len(nums)
+        def dfs(depth, tmp) :                 #！
+            result.append(tmp)                 #！
+            for j in range(depth, length) :                 #！
+                dfs(j + 1, tmp + [nums[j]])                 #！
+
+        dfs(0, [])
+        return result
+
+
+
+# 79. 单词搜索
+# 不知道怎么用dp记录，怎么转移
+# 官方用了我认为会超时的回溯
+class Solution:
+    def exist(self, board: List[List[str]], word: str) -> bool:
+        directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+        m, n = len(board), len(board[0])
+        visited = [[False] * n for _ in range(m)]                 #！
+        def check(board_row, board_colomn, word_index) :                 #！
+            if board[board_row][board_colomn] != word[word_index] :
+                return False
+            
+            if word_index == len(word) - 1 :                 #！
+                return True
+            
+            visited[board_row][board_colomn] = True
+            for direction_x, direction_y in directions :
+                next_x, next_y = direction_x + board_row, direction_y + board_colomn
+                if 0 <= next_x < m and 0 <= next_y < n :                 #！
+                    if not visited[next_x][next_y] :                 #！
+                        if check(next_x, next_y, word_index + 1) :                 #！
+                            return True
+            visited[board_row][board_colomn] = False                 #！
+            return False
+
+
+
+        for board_row in range(m) :
+            for board_colomn in range(n) :
+                if check(board_row, board_colomn, 0) :                 #！
+                    return True
+
+        return False
+
+
+
+# 84. 柱状图中最大的矩形
+# 想不出什么时候改变 l r
+# 和蓄水池问题有什么不同？ 蓄水池从两边往中间走，计算蓄水体积。规律就是最短的能蓄到水
+# 想不出
+
+# 单调栈（对 left 的存储），哨兵
+
+class Solution:
+    def largestRectangleArea(self, heights: List[int]) -> int:
+        max_area = 0
+        
+        heights = [0] + heights + [0]
+        length = len(heights)
+
+        stack = [0]
+
+        for j in range(1, length) :
+            while heights[j] < heights[stack[-1]] :
+                cur_height = heights[stack.pop()]
+                cur_width = j - stack[-1] -1
+                max_area = max(max_area, cur_height * cur_width)
+            stack.append(j) 
+        return max_area
+
+
+# 42 接雨水
+# 自己写。忘记怎么移动左右指针，怎么一步一步
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        left = 0
+        right = len(height) - 1
+        max_left = 0
+        max_right = 0
+        area = 0
+        while left < right :
+            if height[left] > max_left :
+                max_left = height[left]
+                left += 1
+                continue
+            
+            if height[left] <= height[right] :
+                area += max_left - height[left]
+                left += 1
+                continue
+
+                
+            if height[right] > max_right :
+                max_right = height[right]
+                right -= 1
+            
+            if height[right] < height[left] :
+                area += max_right - height[right]
+                right -= 1
+                continue
