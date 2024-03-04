@@ -3046,6 +3046,7 @@ class Solution:
 # 想不出
 
 # 单调栈（对 left 的存储），哨兵
+# 栈内索引到的原始值递增
 
 class Solution:
     def largestRectangleArea(self, heights: List[int]) -> int:
@@ -3066,6 +3067,63 @@ class Solution:
 
 
 # 42 接雨水
+# 官方 单调栈
+# 栈内索引到的原始值非严格递减
+
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        area = 0
+        length = len(height)                 #！
+        stack = []                 #！
+        for j in range(length) :
+            while stack and height[j] > height[stack[-1]] :                 #！j = 0 时，先判断 and 前 不满足就跳过了，不执行后面的，所以不会索引越界
+                inside_one = stack.pop()
+                if not stack :                 #！保证有左中右
+                    break
+                currwidth = j - stack[-1] -1
+                currheight = min(height[j], height[stack[-1]]) - height[inside_one]                 #！！看半天没找到错误，前面写成了height = 。导致命名重复
+                area += currwidth * currheight 
+            stack.append(j)                 #！append 错 height[j]
+        return area
+
+# 单调栈自己想不出怎么写。出栈后算面积，不知道如何递归，对于夹在中间的小柱体不知道如何删去重复面积
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        
+        left = 0
+        right = 0
+        area = 0
+        length = len(height) - 1
+        stack = [0]
+        for j in range(length)
+            while height[j] > height[stack[-1]] :
+                min_max_height = height[stack.pop()]
+                for k in range( )
+
+
+# 官方 双指针
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        left = 0
+        right = len(height) - 1
+        max_left = 0
+        max_right = 0
+        area = 0
+        while left < right :
+            
+            max_left = max(max_left, height[left])
+            max_right = max(max_right, height[right])    
+            
+            if height[left] <= height[right] :
+                area += max_left - height[left]
+                left += 1
+                
+            
+            else :
+                area += max_right - height[right]
+                right -= 1
+        return area
+
 # 自己写。忘记怎么移动左右指针，怎么一步一步
 class Solution:
     def trap(self, height: List[int]) -> int:
@@ -3094,3 +3152,177 @@ class Solution:
                 area += max_right - height[right]
                 right -= 1
                 continue
+
+
+
+# 85. 最大矩形
+# 怎么记录？
+# 官方，转换成上一题，没大看透原因。dp没看，其他人的解答才有
+class Solution:
+    def maximalRectangle(self, matrix: List[List[str]]) -> int:
+
+        def largestRectangleArea(heights: List[int]) -> int:
+            max_area = 0
+            heights = [0] + heights + [0]
+            length = len(heights)
+            stack = [0]
+
+            for j in range(1, length) :
+                while heights[j] < heights[stack[-1]] :
+                    cur_height = heights[stack.pop()]
+                    cur_width = j - stack[-1] -1
+                    max_area = max(max_area, cur_height * cur_width)
+                stack.append(j) 
+            return max_area
+
+        rows, cols = len(matrix), len(matrix[0])
+        height = [0] * cols
+        matrix_area = 0
+        for j in range(rows) :
+            for k in range(cols) :
+                if matrix[j][k] == '1' :
+                    height[k] += 1
+                else :
+                    height[k] = 0
+            matrix_area =  max(matrix_area, largestRectangleArea(height))
+        return matrix_area
+
+
+
+
+
+# 94. 二叉树的中序遍历
+# 直接抄 递归
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def inorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+        result = []
+        def inorder(root) :
+            if not root : return
+            inorder(root.left)
+            result.append(root.val)
+            inorder(root.right)
+
+        inorder(root)
+        return result
+
+# 迭代不会写
+class Solution:
+    def inorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+        result = []
+        stack = []
+        while root or stack :
+            while root :
+                stack.append(root)
+                root = root.left
+            final_node = stack.pop()
+            result.append(final_node.val)
+            root = final_node.right
+        return result
+
+
+# 96. 不同的二叉搜索树
+# 想不出
+class Solution:
+    def numTrees(self, n: int) -> int:
+        G = [0] * (n + 1)
+        G[0] = G[1] = 1                      # 边界问题不好理解 G[0]
+        for j in range(2, n + 1) :
+            for k in range(1, j + 1):
+                G[j] += G[k - 1] * G[j - k]                       # += 误以为 =
+        return G[-1]
+
+
+
+# 98. 验证二叉搜索树
+# 自己写。答案采用 迭代法中序 return
+# 自己不会迭代。一开始想除了stack外，再加一个[]记录
+#if root.val <= inorder:
+#                return False
+#   inorder = root.val
+# 递归也可以使用if语句判断递归来结束递归
+#if not helper(node.right, val, upper):
+#                return False
+class RecursiveBreak(Exception):
+    pass
+class Solution:
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+        try:
+            record = float('-inf')
+            def inorder(root) :
+                nonlocal record
+                if not root : return 
+                inorder(root.left)
+                if record >= root.val : raise RecursiveBreak("Condition satisfied, breaking recursion")
+                record = root.val
+                inorder(root.right)
+
+            inorder(root)
+            return True
+        except RecursiveBreak as e:
+            return False
+
+
+
+# 101. 对称二叉树
+
+class Solution:
+    def isSymmetric(self, root: Optional[TreeNode]) -> bool:
+        left_one = 0
+        right_one = 0
+        left_root = root.left
+        right_root = root.right
+        left_stack, right_stack  = [], []
+        while (left_root or right_root) or (left_stack and right_stack) :                       #！ or or and 一开始写成 and or and
+            while left_root :
+                left_stack.append(left_root)
+                left_root = left_root.right
+
+            while right_root :
+                right_stack.append(right_root)
+                right_root = right_root.left
+
+            if len(left_stack) != len(right_stack) : return False
+
+            curleft = left_stack.pop()
+            curright = right_stack.pop()
+
+            if curleft.val != curright.val : return False
+
+            left_root = curleft.left
+            right_root = curright.right
+
+        return True
+
+
+# 102. 二叉树的层序遍历
+# 只想到前序遍历记录 depth 。但是太蠢。答案对蠢方法的优化：可以利用哈希表，维护一个以 level 为键，对应节点值组成的数组为值
+# 使用改进的bfs
+# 无法区分队列中的结点来自哪一层。
+# 先记录队列中的结点数量 nnn（也就是这一层的结点数量），然后一口气处理完这一层的 nnn 个结点。
+# 一口气处理????
+# while 里 再放一个 while 计数
+
+
+class Solution:
+    def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+        record = deque()                     #！
+        result = []
+        if not root : return []                     #！
+        record.append(root)
+        while record :
+            length = len(record)
+            inner_list = []
+            for _ in range(length) :
+                curnode = record.popleft()                     #！
+                inner_list.append(curnode.val)
+                if curnode.left : record.append(curnode.left)                     #！if   if not
+                if curnode.right : record.append(curnode.right)
+            result.append(inner_list)
+        return result
+
