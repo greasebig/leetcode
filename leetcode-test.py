@@ -3524,3 +3524,78 @@ class Solution:
             fast = fast.next.next
             slow = slow.next
         return True
+
+
+
+# 复习
+# 矩阵相乘
+# A B
+new_maxtrix = [[0] * len(B[0]) for _ in range(len(A))]
+for j in range(len(A)) :
+    for k in range(len(B[0])) :
+        for h in range(len(A[0])) :
+            new_maxtrix[j][k] += A[j][h] * B[h][k]
+
+
+# 1.两数之和
+# 哈希表，一次遍历
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        table = {}
+        for j, num in enumerate(nums) :
+            if target - num in table :
+                return [j, table[target - num]]
+            table[num] = j
+        return []
+
+
+# 2. 两数相加
+# 不知道怎么判断有一个链表结束
+# 使用 or , if ,以及赋值if
+class Solution:
+    def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+        head = None
+        carry = 0
+        while l1 or l2 :                         #!
+            val1 = l1.val if l1 else 0                         #!
+            val2 = l2.val if l2 else 0
+            sum_cur = val1 + val2 + carry                          #!
+            if not head : head = tail = ListNode(sum_cur % 10)                         #!
+            else : 
+                tail.next = ListNode(sum_cur % 10)                         #!
+                tail = tail.next
+            carry = sum_cur // 10                         #!
+            if l1 : l1 = l1.next                         #!
+            if l2 : l2 = l2.next
+        if carry : tail.next = ListNode(carry)                         #!
+        return head
+
+# 反转链表
+tail = None
+while head :
+    
+    next_node = head.next
+    head.next = tail
+    tail = head
+    head = next_node  
+
+
+
+# 3. 无重复字符的最长子串
+# 没有好想法，逐个遍历，重复停止，记录最长
+# 'dict' object has no attribute 'add'
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        right, max_length = -1, 0
+        record = set()
+        length = len(s)
+        for j in range(length) :
+            if j != 0 :
+                record.remove(s[j - 1])
+            while right + 1 < length and s[right + 1] not in record :
+                record.add(s[right + 1])
+                right += 1
+            cur_length = right - j + 1
+            max_length = max(max_length, cur_length)
+        return max_length
+

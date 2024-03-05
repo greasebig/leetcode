@@ -472,6 +472,15 @@ preorder 和 inorder 均 无重复 元素
 wordDict = set(wordDict)     
 s[j : k] in wordDict :            
 
+- set()和{} 即dict不一样
+'dict' object has no attribute 'add'     
+dict也没有append    
+得想列表一样直接赋值。a[1] = 2       
+都有remove   
+set有add   
+
+
+
 ## 递归中断结束方法
 - 法一 Exception     
 class RecursiveBreak(Exception):     
