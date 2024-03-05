@@ -3326,3 +3326,201 @@ class Solution:
             result.append(inner_list)
         return result
 
+# 105. 从前序与中序遍历序列构造二叉树
+# 还原和构造都比较复杂
+# 想使用list find index， 递归 但是觉得时间复杂度有n^2logn太大。想一次遍历
+
+# preorder 和 inorder 均 无重复 元素
+# 官方 在中序遍历中对根节点进行定位时，一种简单的方法是直接扫描整个中序遍历的结果并找出根节点，
+#但这样做的时间复杂度较高。我们可以考虑使用哈希表来帮助我们快速地定位根节点。对于哈希映射中的每个键值对，
+#键表示一个元素（节点的值），值表示其在中序遍历中的出现位置。在构造二叉树的过程之前，我们可以对中序遍历的列表进行一遍扫描，
+#就可以构造出这个哈希映射。在此后构造二叉树的过程中，我们就只需要 O(1)O(1)O(1) 的时间对根节点进行定位了。
+
+# 一边扫面，空间哈希 换 重新检索时间
+
+# 看完官方边界输入输出后自己写
+class Solution:
+    def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:        
+        m, n = len(preorder), len(inorder)
+        inorder_dict = {}
+        for j in range(n) :
+            inorder_dict[inorder[j]] = j                    #！
+        def dfs(preorder_left, preorder_right, inorder_left, inorder_right) :                    #！
+            if preorder_left > preorder_right :                    #！
+                return None
+            root = TreeNode(preorder[preorder_left])
+            cur_root_index_inorder = inorder_dict[preorder[preorder_left]]
+            left_length = cur_root_index_inorder - inorder_left
+            root.left = dfs(preorder_left + 1, preorder_left + left_length, inorder_left, cur_root_index_inorder - 1)                    #！
+            root.right = dfs(preorder_left + left_length + 1, preorder_right, cur_root_index_inorder + 1, inorder_right)                    #！
+            return root                    #！
+        return dfs(0, m - 1, 0, n - 1)
+
+
+# 114. 二叉树展开为链表
+# 需要记录太多，不知道O1空间怎么写
+# 官方 法一 两次遍历 前序遍历放进列表，加 逐个构造 i-1 i 控制
+# 法二，一次遍历 while stack逐个存储 右，左， 弹出逐个构造 if not None ，pre
+# 法三 逐个找前驱节点
+class Solution:
+    def flatten(self, root: Optional[TreeNode]) -> None:
+        cur = root
+        while cur :
+            if cur.left :
+                predecessor = save = cur.left
+                while predecessor.right :
+                    predecessor = predecessor.right
+                predecessor.right = cur.right
+                cur.left = None
+                cur.right = save
+            cur = cur.right
+
+
+
+# 自己写不出
+class Solution:
+    def flatten(self, root: Optional[TreeNode]) -> None:
+        """
+        Do not return anything, modify root in-place instead.
+        """
+        def dfs(root) :
+            if not root : 
+
+            root.left, root.right = root.right, root.left
+            if not root.left : 
+            else : dfs(root.left)
+            if not root.right : 
+            else : dfs(root.right)
+
+        dfs
+
+
+
+
+# 124. 二叉树中的最大路径和
+# 题意是 最大可连接路径和
+class Solution:
+    def maxPathSum(self, root: Optional[TreeNode]) -> int:
+        max_num = float('-inf')
+        def sumf(root) :
+            nonlocal max_num
+            if not root : return 0
+            left_sum = max(sumf(root.left), 0)
+            right_sum = max(sumf(root.right), 0)         # 0 此时表示不选取 负值 自动分析
+            sum_all = root.val + left_sum + right_sum         # 当前节点计算sum
+            max_num = max(sum_all, max_num)
+            return root.val + max(left_sum, right_sum)         # 路径选取,返回优化选取结果
+        sumf(root)
+        return max_num
+
+
+# 理解错 题意
+# 自己写成 加和所有子树
+class Solution:
+    def maxPathSum(self, root: Optional[TreeNode]) -> int:
+        max_num = root.val
+        def inorder_sum(root) :
+            nonlocal max_num
+
+            if not root : return 0
+
+            if root.left : left_sum = inorder_sum(root.left)
+            else : left_sum = float('-inf')
+            mid = root.val
+            if root.right : right_sum = inorder_sum(root.right)
+            else : right_sum = float('-inf')
+
+            if left_sum == float('-inf') and right_sum == float('-inf'):
+                sum_all = mid
+            elif left_sum == float('-inf') :
+                sum_all = mid + right_sum
+            elif right_sum == float('-inf') :
+                sum_all = mid + left_sum
+            else :
+                sum_all = mid + left_sum + right_sum
+
+            max_num = max(max_num, \
+            mid, left_sum, right_sum, \
+            mid + left_sum, mid + right_sum, \
+            mid + left_sum + right_sum)
+
+            return sum_all
+
+        inorder_sum(root)
+        return max_num
+
+
+
+
+
+# 128. 最长连续序列
+# 想不出On，想去遍历计数，看答案
+class Solution:
+    def longestConsecutive(self, nums: List[int]) -> int:
+        nums_set = set(nums)
+        max_length = 0
+        for num in nums_set :
+            if num - 1 not in nums_set :
+                cur_num = num
+                cur_length = 1
+                while cur_num + 1 in nums_set :
+                    cur_num += 1
+                    cur_length += 1
+                max_length = max(max_length, cur_length)
+        return max_length
+
+
+# 139. 单词拆分
+# 每找出一个又重新遍历吗？时间复杂度太高
+# dp不会
+class Solution:
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+        length = len(s)                 # 
+        dp = [False] * (length + 1)
+        dp[0] = True
+        for j in range(length) :                 # 边界问题被搞晕
+            for k in range(j + 1, length + 1) :                 # 边界问题被搞晕
+                dp_index = j                 # 索引问题被搞晕
+                if dp[dp_index] and s[j : k] in wordDict :                 # 边界问题被搞晕.转移方程
+                    dp[k] = True
+                                     # 画蛇添足break
+        return dp[-1]
+
+# 141. 环形链表
+# 不会判断
+class Solution:
+    def hasCycle(self, head: Optional[ListNode]) -> bool:
+        seen = set()
+        while head :
+            if head in seen :
+                return True
+            seen.add(head)
+            head = head.next
+        return False
+
+
+# 自己写双指针错误
+class Solution:
+    def hasCycle(self, head: Optional[ListNode]) -> bool:
+        fast = head.next
+        slow = head
+        while slow != fast :
+            if not slow or not fast :
+                return False
+            if not fast.next : fast = fast.next.next
+            else : return False
+            slow = slow.next
+        return True
+# 答案
+class Solution:
+    def hasCycle(self, head: Optional[ListNode]) -> bool:
+        if not head or not head.next:               #
+            return False
+        fast = head.next
+        slow = head
+        while slow != fast :
+            if not fast or not fast.next :               #
+                return False
+            fast = fast.next.next
+            slow = slow.next
+        return True
