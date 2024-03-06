@@ -3689,3 +3689,49 @@ class Solution:
                     else : break
         return longest_str 
 
+# 6. Z 字形变换
+# 思路还是最开始时的老旧失败想法
+# flag方法
+class Solution:
+    def convert(self, s: str, numRows: int) -> str:
+        if numRows < 2 : return s
+        result = [''] * numRows
+        i = 0
+        flag = -1
+        for c in s :
+            result[i] += c
+            if i == 0 or i == numRows - 1 : flag = -flag
+            i += flag
+        return ''.join(result)
+
+
+# 9. 回文数
+# x = 10 20 30 110 无法判断 反过来首位有0
+# 自己的错误代码
+class Solution:
+    def isPalindrome(self, x: int) -> bool:
+        if x < 0 : return False
+        if x < 10 : return True
+        left = x
+        right = 0
+        while left > right :
+            right = right * 10 + left % 10
+            if right == left : return True
+            left //= 10
+            if right == left : return True
+        return False
+
+# 正确官方
+class Solution:
+    def isPalindrome(self, x: int) -> bool:
+        if 0 <= x < 10 : return True
+        if x < 0 or x % 10 == 0: return False
+        
+        left = x
+        right = 0
+        while left > right :
+            right = right * 10 + left % 10
+            if right == left : return True
+            left //= 10
+            if right == left : return True
+        return False

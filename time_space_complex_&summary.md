@@ -479,7 +479,20 @@ dict也没有append
 都有remove   
 set有add   
 
-
+- ''.join(dp[current_row][current_column] for current_row in range(row) for current_column in range(column))   
+生成器表达式   
+生成器表达式则使用圆括号 () 创建一个生成器对象    
+等价于   
+```
+result = ''
+for current_row in range(row):
+    for current_column in range(column):
+        result += dp[current_row][current_column]
+```
+```
+列表推导式
+''.join([dp[current_row][current_column] for current_row in range(row) for current_column in range(column)])
+```
 
 ## 递归中断结束方法
 - 法一 Exception     
