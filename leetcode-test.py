@@ -3552,6 +3552,7 @@ class Solution:
 # 2. 两数相加
 # 不知道怎么判断有一个链表结束
 # 使用 or , if ,以及赋值if
+# 
 class Solution:
     def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
         head = None
@@ -3584,6 +3585,7 @@ while head :
 # 3. 无重复字符的最长子串
 # 没有好想法，逐个遍历，重复停止，记录最长
 # 'dict' object has no attribute 'add'
+# 集合
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
         right, max_length = -1, 0
@@ -3598,4 +3600,92 @@ class Solution:
             cur_length = right - j + 1
             max_length = max(max_length, cur_length)
         return max_length
+
+
+
+# 4. 寻找两个正序数组的中位数
+# 边界问题还是很难分清 索引 +1 -1 就蒙圈，两个数组索引再//2，分成两个，边界索引都找不到
+# chatgpt写的十分复杂 <= < +1再//2
+# 正常人怎么处理这种边界
+# 官方答案也很多边界
+# 需要考虑奇偶数的+1 -1 //2   大量数字时, 少量数字时。
+
+# 做出来的意义就是对奇偶数，//2,索引 理解更深而已
+
+# 另一种思路，操作索引，很少计算值。以下#全是边界问题
+class Solution:
+    def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
+        n1 = len(nums1)
+        n2 = len(nums2)
+        if n1 > n2:
+            return self.findMedianSortedArrays(nums2, nums1)
+
+        k = (n1 + n2 + 1) // 2
+        left = 0
+        right = n1
+        while left < right:
+            m1 = left + (right - left) // 2    # 在 nums1 中取前 m1 个元素
+            m2 = k - m1                        # 在 nums2 中取前 m2 个元素
+            if nums1[m1] < nums2[m2 - 1]:      # 说明 nums1 中所元素不够多，
+                left = m1 + 1
+            else:
+                right = m1
+
+        m1 = left
+        m2 = k - m1
+        
+        c1 = max(float('-inf') if m1 <= 0 else nums1[m1 - 1], float('-inf') if m2 <= 0 else nums2[m2 - 1])
+        if (n1 + n2) % 2 == 1:
+            return c1
+
+        c2 = min(float('inf') if m1 >= n1 else nums1[m1], float('inf') if m2 >= n2 else nums2[m2])
+
+        return (c1 + c2) / 2
+
+
+
+# 5. 最长回文子串
+# 忘记dp方法
+# dp一看过去就很绕
+# 自己分情况写中心扩展法
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        length = len(s) 
+        if length < 0 : return ''
+        longest_str = s[0]
+        max_length = 1
+        for j in range(length) :
+            # 奇数
+            cur_length = 1
+            left = j - 1
+            right = j + 1
+            
+            while left >= 0 and right < length :
+                if s[left] == s[right] :
+                    cur_length += 2
+                    if cur_length > max_length :
+                        longest_str = s[left : right + 1]
+                        max_length = cur_length
+                    left -= 1
+                    right += 1
+                else : break
+            # 偶数
+            if j + 1 < length and s[j] == s[j + 1] :
+                cur_length = 2
+                if cur_length > max_length :
+                        longest_str = s[j : j + 2]
+                        max_length = cur_length
+                left = j - 1
+                right = j + 2
+                
+                while left >= 0 and right < length :
+                    if s[left] == s[right] :
+                        cur_length += 2
+                        if cur_length > max_length :
+                            longest_str = s[left : right + 1]
+                            max_length = cur_length
+                        left -= 1
+                        right += 1
+                    else : break
+        return longest_str 
 
