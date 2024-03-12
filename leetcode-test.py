@@ -3735,3 +3735,22 @@ class Solution:
             left //= 10
             if right == left : return True
         return False
+
+
+# 3.13复习重新写
+# 50
+# 42逻辑不通顺
+
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        stack = []
+        area = 0
+        for i in range(len(height)):            
+            while stack and height[i] > height[stack[-1]]:         # 写成 > stack[-1]       
+                mid = stack.pop()
+                if len(stack) == 0 : break         # 写成 <= 2
+                length = i - stack[-1] - 1
+                area += min(height[stack[-1]] - height[mid], height[i] - height[mid]) * length     
+                # 写成 stack[-1] - 
+            stack.append(i)
+        return area
