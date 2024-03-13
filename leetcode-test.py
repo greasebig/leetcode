@@ -3754,3 +3754,74 @@ class Solution:
                 # 写成 stack[-1] - 
             stack.append(i)
         return area
+
+
+# LCR 077. 排序链表
+# 列表超时
+def quicksort(curlist):
+            if len(curlist) <= 1 : return curlist
+            mid_index = len(curlist) // 2
+            left_part = []
+            right_part = []
+            for i, a in enumerate(curlist) :
+                if i == mid_index : continue                                  # 漏
+                if a <= curlist[mid_index] : left_part.append(a)
+                elif a > curlist[mid_index] : right_part.append(a)
+            return quicksort(left_part) + [curlist[mid_index]] + quicksort(right_part)                          # 中间漏[]
+        
+        dummy = ListNode(0, head)
+        record = []
+        while head :
+            record.append(head.val)
+            head = head.next
+        result = quicksort(record)
+        prehead = dummy
+        for a in result :
+            prehead.next = ListNode(a)
+            prehead = prehead.next
+        
+        return dummy.next
+
+# 答案
+# 全抄的，具体不知道怎么考量边界，奇偶
+class Solution:
+
+    def merge(self, head1, head2):
+        Head = ListNode()
+        temp = Head
+        temp1 = head1
+        temp2 = head2
+        while temp1 and temp2 :
+            if temp1.val < temp2.val:
+                temp.next = temp1
+                temp1 = temp1.next
+            else :
+                temp.next = temp2
+                temp2 = temp2.next
+            temp = temp.next
+        if temp1 :
+            temp.next = temp1
+        if temp2 :
+            temp.next = temp2
+        return Head.next
+
+    def getMidListnode(self, head, tail):
+        slow = head
+        fast = head
+        while fast != tail :
+            slow = slow.next
+            fast = fast.next
+            if fast != tail :
+                fast = fast.next
+        return slow                 #奇偶？ 
+
+    def msort(self, head, tail):
+        if head == None : return head
+        if head.next == tail : 
+            head.next = None
+            return head
+        mid = self.getMidListnode(head, tail)
+        return self.merge(self.msort(head, mid), self.msort(mid, tail))               #奇偶？ 边界？
+
+    def sortList(self, head: ListNode) -> ListNode:
+        return self.msort(head, None)                     # class中的def调用和定义都要有self，def中def就都不需要self
