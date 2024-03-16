@@ -3825,3 +3825,45 @@ class Solution:
 
     def sortList(self, head: ListNode) -> ListNode:
         return self.msort(head, None)                     # class中的def调用和定义都要有self，def中def就都不需要self
+
+# 重写42接雨水
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        stack = []
+        area = 0
+        for j in range(len(height)) :
+            while stack and height[j] > height[stack[-1]] :
+                mid_index = stack.pop()
+                if stack == [] : break         ## == None不行
+                length = j - stack[-1] - 1
+                area += length * min(height[j] - height[mid_index], \
+                height[stack[-1]] - height[mid_index])
+            stack.append(j)
+        return area
+
+
+# 重写84 柱状图中最大的矩形    哨兵节点想了挺久
+class Solution:
+    def largestRectangleArea(self, heights: List[int]) -> int:
+        
+        heights = [0] + heights + [0]
+        stack = []
+        max_area = 0
+        for j in range(len(heights)):
+            while stack and heights[stack[-1]] > heights[j]:
+                cur_height = heights[stack.pop()] 
+                cur_length = j - stack[-1] - 1 
+                max_area = max(max_area, cur_height * cur_length)
+            stack.append(j)
+        return max_area
+
+
+
+
+
+
+
+
+
+
+

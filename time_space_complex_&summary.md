@@ -494,6 +494,12 @@ for current_row in range(row):
 ''.join([dp[current_row][current_column] for current_row in range(row) for current_column in range(column)])
 ```
 
+列表         
+if stack == [] : break         ## == None不行
+
+
+
+
 ## 递归中断结束方法
 - 法一 Exception     
 class RecursiveBreak(Exception):     
