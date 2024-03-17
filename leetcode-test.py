@@ -3859,6 +3859,135 @@ class Solution:
 
 
 
+# 重写 LCR 077. 排序链表
+# 运行速度较慢
+class Solution:
+    def sortList(self, head: ListNode) -> ListNode:
+        def findmid(head1, tail) :
+            fast = slow = head1 
+            while fast != tail :
+                slow = slow.next
+                fast = fast.next
+                if fast != tail :
+                    fast = fast.next
+            return slow
+
+        def merge(head1, head2):
+            dummy = Head = ListNode()
+            while head1 and head2 :
+                if head1.val > head2.val : 
+                    Head.next = ListNode(head2.val)
+                    head2 = head2.next
+                else :
+                    Head.next = ListNode(head1.val)
+                    head1 = head1.next
+                Head = Head.next
+            if head1 :
+                Head.next = head1
+            if head2 :
+                Head.next = head2
+            return dummy.next
+
+        def msort(head1, tail):               # 担心小局部变量受到大局部变量影响，head变head1。实际上没有影响，见下面代码
+            if head1 == tail: return head1
+            if head1.next == tail: 
+                head1.next = None                #缺少这一步，导致多出一些元素，没断掉
+                return head1
+            mid = findmid(head1, tail)
+            return merge(msort(head1, mid), msort(mid, tail))
+
+        return msort(head, None)
+
+
+
+class Solution:
+    def sortList(self, head: ListNode) -> ListNode:
+        def findmid(head, tail) :
+            fast = slow = head 
+            while fast != tail :
+                slow = slow.next
+                fast = fast.next
+                if fast != tail :
+                    fast = fast.next
+            return slow
+
+        def merge(head1, head2):
+            dummy = Head = ListNode()
+            while head1 and head2 :
+                if head1.val > head2.val : 
+                    Head.next = ListNode(head2.val)
+                    head2 = head2.next
+                else :
+                    Head.next = ListNode(head1.val)
+                    head1 = head1.next
+                Head = Head.next
+            if head1 :
+                Head.next = head1
+            if head2 :
+                Head.next = head2
+            return dummy.next
+
+        def msort(head, tail):
+            if head == tail: return head
+            if head.next == tail: 
+                head.next = None
+                return head
+            mid = findmid(head, tail)
+            return merge(msort(head, mid), msort(mid, tail))
+
+        return msort(head, None)
+
+
+# LCR 023. 相交链表
+# 想不出On解法
+class Solution:
+    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
+        record = set()
+        while headA:
+            record.add(headA)
+            headA = headA.next
+        while headB :
+            if headB in record :
+                return headB
+            headB = headB.next
+        return None
+
+
+
+# LCR 027. 回文链表
+class Solution:
+    def isPalindrome(self, head: ListNode) -> bool:
+        record = []
+        dummy = ListNode(0, head)
+        num = 0
+        while head:             # 一开始不想计数，想找到相等就回转
+            num += 1
+            head = head.next
+
+        fast = slow = dummy.next
+        half = num >> 1
+        reverse_record = None
+        for _ in range(half) :
+            fast = fast.next
+
+            cur = slow
+            slow = slow.next
+            cur.next = reverse_record
+            reverse_record = cur
+
+        if num & 1 == 1 :
+            fast = fast.next
+
+
+        while fast and reverse_record :
+            if fast.val != reverse_record.val : return False    # 少写val
+            
+            fast = fast.next
+            reverse_record = reverse_record.next
+        if fast != None or reverse_record != None : return False
+        # 错误写法  if fast not None or reverse_record not None : return False
+        # 正确写法 if fast is not None and reverse_record is not None:
+        return True
 
 
 

@@ -1,4 +1,7 @@
 # 时间复杂度与空间复杂度
+时间复杂度是 O(nlog⁡n) 的排序算法包括归并排序、堆排序和快速排序（快速排序的最差时间复杂度是 O(n^2)，其中最适合链表的排序算法是归并排序。
+
+
 ## leetcode 3 for循环和字典
 ```python
 class Solution:
@@ -388,7 +391,7 @@ dp4[2][2] = True
 
 ```
 
-- 列表不能直接相减    
+### 列表不能直接相减    
 ```
 newlist = list(filter(lambda x: x not in little_list, nums))                          #！
             for x in newlist :     
@@ -467,18 +470,35 @@ preorder 和 inorder 均 无重复 元素
 # 一边扫描，空间哈希 换 重新检索时间
 ```
 
+### set()添加元素方法。由list 变 set 去检索 in 可能加快速度。
 
 - 由list 变 set 去检索 in 不会加快速度：    
 wordDict = set(wordDict)     
 s[j : k] in wordDict :            
 
+        record = set()
+        while headA:
+            record.add(headA)
+            headA = headA.next
+        while headB :
+            if headB in record :
+list 2s set() 70ms
+
 - set()和{} 即dict不一样
 'dict' object has no attribute 'add'     
-dict也没有append    
-得想列表一样直接赋值。a[1] = 2       
+dict没有add 也没有append    
+dict得像列表一样直接赋值。a[1] = 2       
 都有remove   
 set有add   
 
+如果要向字典中添加单个键值对，可以使用 dict[key] = value 语法，或者 dict.update({key: value}) 方法。        
+print(my_dict)  # 输出: {'key': 'value', 'another_key': 'another_value'}    
+
+集合set()       
+print(my_set)  # 输出: {'element'}
+
+
+### 生成器表达式 列表推导式
 - ''.join(dp[current_row][current_column] for current_row in range(row) for current_column in range(column))   
 生成器表达式   
 生成器表达式则使用圆括号 () 创建一个生成器对象    
@@ -494,8 +514,17 @@ for current_row in range(row):
 ''.join([dp[current_row][current_column] for current_row in range(row) for current_column in range(column)])
 ```
 
+
+### None
 列表         
 if stack == [] : break         ## == None不行
+
+链表   
+is not None
+
+    正确写法 if fast != None or reverse_record != None : return False
+    # 错误写法  if fast not None or reverse_record not None : return False
+    # 正确写法 if fast is not None and reverse_record is not None:
 
 
 
@@ -560,7 +589,17 @@ class Solution:
 后序遍历右子树
 访问根节点
 在代码中，后序遍历可以表示为：left -> right -> root。
+
 ```
+
+
+- 递归为我们提供了一种优雅的方式来反向遍历链表节点。
+
+        function print_values_in_reverse(ListNode head)
+            if head is NOT null
+                print_values_in_reverse(head.next)
+                print head.val
+
 
 
 # 总结
