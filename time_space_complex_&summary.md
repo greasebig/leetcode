@@ -205,6 +205,32 @@ new_combine.append(char1 + char2)       # ！往列表内添加元素，不能li
 left_list = []    
 都可以当成 if False :     
 
+## hashmap dict.get
+dict.get()函数比较常见，记录一下用法。        
+该函数用于选择赋值。(搜索`键`，取出值),无值不会报错KeyError       
+常见为dict.get(a,b):a是键值key，如果存在dict存在键值a，则函数返回dict[a]；否则返回b，如果没有定义b参数，则返回None。      
+上代码：
+
+m={'a':1,'b':2,'center':3}     
+m.get('a',100)        
+>>>1
+
+m={'a':1,'b':2,'center':3}     
+m.get(2,100)        
+>>>100
+
+m={'a':1,'b':2,'center':3}     
+m.get(2)       
+>>>None
+
+    m={'a':1,'b':2,'center':3}     
+    print(m.get('a',100) ) 
+    print(m['a']) 
+    print(m[1])          #报错KeyError
+
+
+
+
 
 
 ## 反转链表

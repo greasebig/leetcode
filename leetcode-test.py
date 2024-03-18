@@ -3990,8 +3990,24 @@ class Solution:
         return True
 
 
+# 560. 和为 K 的子数组
+# 面试做不出，看不懂
+def k_num(nums, k):
+    if len(nums) == 0 :
+        return 0
+    
+    n = len(nums)   
+    ans = 0
 
+    sum = 0
+    record_dict = {0 : 1}
 
+    for i in range(n):
+        sum += nums[i]
+        ans += record_dict.get(sum - k, 0)
+        record_dict[sum] = record_dict.get(sum, 0) + 1
+
+    return ans
 
 
 
