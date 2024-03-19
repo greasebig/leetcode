@@ -3992,6 +3992,7 @@ class Solution:
 
 # 560. 和为 K 的子数组
 # 面试做不出，看不懂
+# 事后依然看不懂为什么通过num-k找到的次数能进行累加
 def k_num(nums, k):
     if len(nums) == 0 :
         return 0

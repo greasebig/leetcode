@@ -1,4 +1,4 @@
-# 时间复杂度与空间复杂度
+## 时间复杂度与空间复杂度
 时间复杂度是 O(nlog⁡n) 的排序算法包括归并排序、堆排序和快速排序（快速排序的最差时间复杂度是 O(n^2)，其中最适合链表的排序算法是归并排序。
 
 
@@ -206,6 +206,7 @@ left_list = []
 都可以当成 if False :     
 
 ## hashmap dict.get
+### 哈希表查询key的value或者是否有key
 dict.get()函数比较常见，记录一下用法。        
 该函数用于选择赋值。(搜索`键`，取出值),无值不会报错KeyError       
 常见为dict.get(a,b):a是键值key，如果存在dict存在键值a，则函数返回dict[a]；否则返回b，如果没有定义b参数，则返回None。      
@@ -227,6 +228,88 @@ m.get(2)
     print(m.get('a',100) ) 
     print(m['a']) 
     print(m[1])          #报错KeyError
+
+### 哈希表查询value的方法
+第一种方法：利用in关键字  
+if 1 in dict1.values():     
+这种方法的优点是代码简洁明了，缺点是当字典中的value值比较多时，查找速度会比较慢。   
+
+第三种方法：利用has_key()方法  
+if dict1.has_key(1):     
+这种方法已经在Python3.x版本中被移除，不再支持。所以如果你的项目是在Python2.x版本中进行开发的，并且不需要跨版本兼容，可以考虑使用这种方法。   
+
+这个has_value函数通过map函数将字典的项（键值对）映射到它们的值上，然后检查value是否在映射后的值列表中。
+
+    def has_value(d, value):
+        return value in map(lambda x: x[1], d.items())
+    
+    # 示例使用
+    my_dict = {'a': 1, 'b': 2, 'c': 3}
+    print(has_value(my_dict, 2))  # 输出: True
+    print(has_value(my_dict, 4))  # 输出: False
+
+如果你需要频繁地执行这个查询，考虑使用以下方法可以提高性能：这里使用了any函数和生成器表达式来检查字典的值中是否存在value。这样做比先创建一个列表要更加高效，尤其是在处理大字典时。?????
+
+    def has_value(d, value):
+        return any(v == value for v in d.values())
+    
+    # 示例使用
+    my_dict = {'a': 1, 'b': 2, 'c': 3}
+    print(has_value(my_dict, 2))  # 输出: True
+    print(has_value(my_dict, 4))  # 输出: False
+
+### 哈希表内置函数
+用内置函数items() 返回的就是每一组的key:value值      
+
+3.用内置函数keys() 返回的就是每一个key值  
+4.用内置函数values() 返回的就是每一个value值  
+
+用函数get(key) 返回的就是value值，如果没有这个key值，则会返回None，相比于dict[key]来说，get(key)更加人性化。   
+dict.get(a,b):a是键值key，如果存在dict存在键值a，则函数返回dict[a]；否则返回b，如果没有定义b参数，则返回None。   
+
+
+### any, map，lambda
+any() 函数用于判断给定可迭代对象中是否存在任何真值（True）。如果存在任何一个元素的值为True，那么any()函数返回True；如果所有元素都是False（或者可迭代对象为空），则返回False。  
+any(iterable)   
+iterable: 可迭代对象，如列表、元组、集合等。  
+
+    # 示例1
+    data = [False, True, False, False]
+    print(any(data))  # 输出 True，因为至少有一个元素为True
+
+    # 示例2
+    data = [0, '', False, None]
+    print(any(data))  # 输出 False，因为所有元素都是假值
+
+map() 函数用于对可迭代对象中的每个元素应用指定的函数，然后返回一个包含所有函数返回值的迭代器。    
+map(function, iterable1, iterable2, ...)   
+return value in map(lambda x: x[1], d.items())    
+lambda构建一行的函数    
+返回一个迭代器，其中包含将函数应用于每个可迭代对象中对应元素的结果。   
+
+    # 示例1：将列表中的每个元素求平方
+    numbers = [1, 2, 3, 4, 5]
+    squared = map(lambda x: x**2, numbers)
+    print(list(squared))  # 输出 [1, 4, 9, 16, 25]
+
+    # 示例2：将两个列表中的对应元素相加
+    list1 = [1, 2, 3]
+    list2 = [4, 5, 6]
+    added = map(lambda x, y: x + y, list1, list2)
+    print(list(added))  # 输出 [5, 7, 9]
+功能类似于pandas的map   
+
+
+
+lambda   
+lambda x, y: x + y   
+lambda x: x**2   
+定义输入输出   
+
+    # 创建一个简单的 lambda 函数，求平方
+    square = lambda x: x ** 2
+    print(square(5))  # 输出 25
+
 
 
 
