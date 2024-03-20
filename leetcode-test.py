@@ -4009,6 +4009,62 @@ def k_num(nums, k):
         record_dict[sum] = record_dict.get(sum, 0) + 1
 
     return ans
+# 也就是找sum[j]-sum[i]=k。即sum[j]-k=sum[i]
+# 若存在sum[j]-k=sum[i]，sum[i]对应的value值为x，则代表这种情况下有x个子数组和为k。
+# 我的理解是 sum[i]对应的value值为x 表示 sum[j]-sum[i]=k 存在 x 个sum[i]方法能达到 k
+# 还是有些绕
+
+# 当计算以j为结尾的和为k的连续子数组的时候 问题转化为 以 j 结尾的连续子数组有 x 个能和为 k
+# 统计有多少个前缀和为pre[j]-k的pre[i]即可
+
+# 问题建构为 每次统计以 j 结尾有多少个子数组能满足和为 k
+# 存在 x 个sum[i]方法能达到 k
+# 问题建构模式类似于 dp 问题，路径问题，统计前一项的累计，到达下一步
+# dp 问题 简化为 一维数组记录
+# 就是路径问题，使用 mp 记录，又使用 mp 检索
+
+# 从左往右更新map。（和不一定递增，下标一定递增）
+
+# 遍历统计 每次 下标以i为结尾的答案mp[pre[i]-k] 最后累加
+
+
+
+
+
+
+ 
+# NC125 和为K的连续子数组 求 arr 所有连续子数组中累加和为k的最长连续子数组长度  
+class Solution:
+    def maxlenEqualK(self , arr: List[int], k: int) -> int:
+        # write code here
+        max_length = 0
+        record_dict = {0:0}         # 对着题解思路，想到保留最长index
+        sum1 = 0
+        for j in range(len(arr)):
+            sum1 += arr[j]
+            max_length = max(max_length, j + 1 - record_dict.get(sum1 - k, float('inf')))      # 返回inf调试想出
+            record_dict[sum1] = min(record_dict.get(sum1, float('inf')), j + 1)          #这min max俩转化画图想出
+        return max_length
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
