@@ -267,6 +267,43 @@ if dict1.has_key(1):
 用函数get(key) 返回的就是value值，如果没有这个key值，则会返回None，相比于dict[key]来说，get(key)更加人性化。   
 dict.get(a,b):a是键值key，如果存在dict存在键值a，则函数返回dict[a]；否则返回b，如果没有定义b参数，则返回None。   
 
+### dict for 直接查询键的方法
+直接查询键的方法：
+
+    table = {'a':1, 'b':2}
+    for num in table :
+        print(num)
+
+    a
+    b
+不需要使用.keys()
+
+
+
+    table = {}
+    for j, num in enumerate(nums) :
+        if target - num in table :
+            return [j, table[target - num]]
+        table[num] = j
+    return []
+
+
+### update
+
+
+    table = {'a':1, 'b':2}
+    table.update({'c':3})
+    print(table)
+
+    {'a': 1, 'b': 2, 'c': 3}
+
+
+
+
+
+
+
+
 
 ### any, map，lambda
 any() 函数用于判断给定可迭代对象中是否存在任何真值（True）。如果存在任何一个元素的值为True，那么any()函数返回True；如果所有元素都是False（或者可迭代对象为空），则返回False。  
@@ -280,6 +317,8 @@ iterable: 可迭代对象，如列表、元组、集合等。
     # 示例2
     data = [0, '', False, None]
     print(any(data))  # 输出 False，因为所有元素都是假值
+
+
 
 map() 函数用于对可迭代对象中的每个元素应用指定的函数，然后返回一个包含所有函数返回值的迭代器。    
 map(function, iterable1, iterable2, ...)   
@@ -298,6 +337,11 @@ lambda构建一行的函数
     added = map(lambda x, y: x + y, list1, list2)
     print(list(added))  # 输出 [5, 7, 9]
 功能类似于pandas的map   
+
+map(str, tokens_to_add)  
+str 是一个内置函数，它将其他类型的对象转换为字符串类型。tokens_to_add 可能是一个可迭代对象，如列表或元组，其中包含需要转换为字符串的元素。    
+因此，这段代码的目的是将 tokens_to_add 中的每个元素转换为字符串类型。   
+
 
 
 
