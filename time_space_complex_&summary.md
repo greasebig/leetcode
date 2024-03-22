@@ -354,7 +354,13 @@ lambda x: x**2
     square = lambda x: x ** 2
     print(square(5))  # 输出 25
 
+    lambda_func = lambda x: (
+        x + 1,
+        x * 2,
+        x ** 3
+    )
 
+    print(lambda_func(2))  # Output: (3, 4, 8)
 
 
 
