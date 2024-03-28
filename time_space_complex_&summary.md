@@ -650,11 +650,30 @@ dict得像列表一样直接赋值。a[1] = 2
 都有remove   
 set有add   
 
+列表    
+.remove(具体内容)    
+.pop(索引号)        
+del a[索引号]   
+
 如果要向字典中添加单个键值对，可以使用 dict[key] = value 语法，或者 dict.update({key: value}) 方法。        
 print(my_dict)  # 输出: {'key': 'value', 'another_key': 'another_value'}    
 
 集合set()       
 print(my_set)  # 输出: {'element'}
+
+### 字符串  
+
+    index() 函数:
+
+    语法: .index(str, beg=0, end=len(string))
+    如果找到指定的子字符串，则返回它在字符串中的起始位置。
+    如果未找到，则会引发 ValueError 异常。
+
+    find() 函数:
+
+    语法: .find(str, beg=0, end=len(string))
+    如果找到指定的子字符串，则返回它在字符串中的起始位置。
+    如果未找到，则返回 -1。
 
 
 ### 生成器表达式 列表推导式
@@ -764,6 +783,65 @@ class Solution:
 # 大厂题目
 阿里暑期实习最后一道代码题比较难，在原序列中位数，有几种方案组合子串得到相同中位数   
 选择题考了一个哈希冲突，排位散列表的方案    
+
+## 赛码 acm 读取输入
+阿里，小红书采用acm读取输入   
+```python
+import sys
+
+
+#读取一行
+#strip()函数用于去除输入行末尾的换行符和空格
+input_data = sys.stdin.readline().strip()
+
+#列表中存放字符串
+input_list = input_data.split() # 其实没必要 strip()
+
+# 一次性转成int
+numbers = list(map(int,input_data.split()))
+#虽然对象是list,但是经过map以后不是list，需要再转成list
+
+
+#循环读取行
+#这个为什么不需要去掉换行符
+for line in sys.stdin:
+    input_list = line.split()
+
+```
+strip()一般用来去掉换行符    
+Python 字符串对象的 strip() 方法用于移除字符串头尾指定的字符 ( 默认为空白符 )   
+空格 ( ' ' ) 、制表符 ( \t ) 、换行符 (\r\n) 统称为空白符       
+在Python中，split()函数默认情况下会去掉字符串中的空白字符（包括空格、制表符和换行符）并返回一个字符串列表。换行符通常被认为是空白字符之一，因此默认情况下会被去掉。     
+
+两个都能去掉空白符  
+
+
+因为split()函数会自动忽略掉分隔符两边的空白。所以，strip()函数在这里一般不会再使用。   
+
+
+需要特别注意的是：split() 与.split(" ")
+```python
+s = "  the sky  is blue"
+list_s = s.split()	# 此时list_s = ["the", "sky", "is", "blue"],因为它是按连续空格切分的，无论中间有多少空格，都进行切分
+list_s = s.split(" ")	# 此时list_s = [" the", "sky", " is", "blue"]，其中the和is
+```
+
+亲手实践    
+```python
+s = "    the  sky  is blue   "
+print(s.split())
+print(s.split(" "))
+
+['the', 'sky', 'is', 'blue']
+['', '', '', '', 'the', '', 'sky', '', 'is', 'blue', '', '', '']
+
+```
+
+
+也可以使用Python input()函数来读取标准输入数据   
+
+
+
 
 # 总结
 - 第10题，困难，一个星期后第二次写，很久才想起方法，但不理解，‘正则项匹配’        
