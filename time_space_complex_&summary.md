@@ -841,6 +841,47 @@ print(s.split(" "))
 也可以使用Python input()函数来读取标准输入数据   
 
 
+## walk
+
+
+```
+import os
+
+# 获取当前文件夹路径
+current_directory = '/home/WujieAITeam/private/lujunda/infer-pics\
+/fid-advance-sdxl-edm2000'
+
+#os.getcwd()
+
+# 使用walk函数遍历当前文件夹及其子文件夹
+for dirpath, dirnames, filenames in os.walk(current_directory):
+    # dirpath是当前文件夹的路径
+    # dirnames是当前文件夹中的子文件夹列表
+    # filenames是当前文件夹中的文件列表
+
+    if dirpath == ref_dir : continue
+    
+    print("当前文件夹路径:", dirpath)
+    print("子文件夹列表:", dirnames)
+
+    #当前文件夹路径: /home/WujieAITeam/private/lujunda/infer-pics/fid-advance-sdxl-edm2000/vehicles
+    #子文件夹列表: []
+
+    当前文件夹路径: /home/WujieAITeam/private/lujunda/infer-pics/fid-advance-sdxl-edm2000
+当前文件夹路径: /home/WujieAITeam/private/lujunda/infer-pics/fid-advance-sdxl-edm2000/art
+当前文件夹路径: /home/WujieAITeam/private/lujunda/infer-pics/fid-advance-sdxl-edm2000/logo
+
+```
+
+
+
+
+
+
+
+
+
+
 
 
 # 总结
