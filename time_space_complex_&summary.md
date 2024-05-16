@@ -779,6 +779,27 @@ class Solution:
                 print head.val
 
 
+## try 和 finally
+try 和 finally 是用来处理异常的两个关键字，它们的作用有所不同：
+
+try 块用于包裹可能会出现异常的代码段。当代码段中出现异常时，Python会跳转到 except 块中执行异常处理代码，如果没有找到匹配的 except 块，异常会向上传递给调用栈的上一级。如果 try 块中没有异常抛出，则会直接执行 try 块中的代码，而不会执行 except 块。
+
+finally 块中的代码无论是否发生异常都会被执行。这意味着，不管 try 块中的代码是否引发了异常，finally 块中的代码都会执行。通常情况下，finally 块用来执行一些清理工作，比如关闭文件或释放资源。
+
+
+    try:
+        # 可能会引发异常的代码
+        f = open('file.txt', 'r')
+        data = f.read()
+        print(data)
+    except FileNotFoundError:
+        print("File not found!")
+    finally:
+        # 无论是否发生异常都会执行的清理代码
+        if f:
+            f.close()
+
+
 
 # 大厂题目
 阿里暑期实习最后一道代码题比较难，在原序列中位数，有几种方案组合子串得到相同中位数   
