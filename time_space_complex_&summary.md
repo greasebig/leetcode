@@ -895,9 +895,35 @@ for dirpath, dirnames, filenames in os.walk(current_directory):
 ```
 
 
+# split()
+使用空格作为分隔符
+
+
+    使用自定义分隔符
+    python
+    复制代码
+    text = "apple,banana,cherry"
+    fruits = text.split(',')
+    print(fruits)
+    # 输出: ['apple', 'banana', 'cherry']
+    使用多字符分隔符
+    python
+    复制代码
+    text = "one--two--three"
+    numbers = text.split('--')
+    print(numbers)
+    # 输出: ['one', 'two', 'three']
 
 
 
+    限制拆分次数
+    指定最大拆分次数
+    python
+    复制代码
+    text = "one, two, three, four, five"
+    parts = text.split(', ', 2)
+    print(parts)
+    # 输出: ['one', 'two', 'three, four, five']
 
 
 

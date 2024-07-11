@@ -4048,13 +4048,100 @@ class Solution:
 
 
 
+# 7.10 复习
+
+# 反转链表
+class ListNode:
+    def __init__(self, x, next=None):
+        self.val = x
+        self.next = next
+
+class Solution:
+    def reverseList(self, head):
+        myreverse = None
+        while head:
+            nextnode = head.next
+            head.next = myreverse
+            myreverse = head
+            head = nextnode
+        return myreverse
+
+ListA = ListNode(1, ListNode(2, ListNode(3, )))
+
+import copy
+ListB = copy.deepcopy(ListA)
+while ListB:
+    print(ListB.val)
+    ListB = ListB.next
+
+
+a = Solution().reverseList(ListA)
+
+while a:
+    print(a.val)
+    a = a.next
 
 
 
 
 
+## 矩阵乘法
+
+class Solution:
+    def matrixMultiply(A, B):
+        C = [[0 for _ in len(A)] for _ in len(B)]
+        for i in len(A):
+            for j in len(B):
+                for k in len(A[0]):
+                    C[i][j] = A[i][k] * B[k][j]
+        return C
+A = [[1,2]]
+B = [[1],[2]]
+C = Solution().matrixMultiply(A, B)
+print(C)
+
+C = Solution().matrixMultiply(A, B)
+TypeError: matrixMultiply() takes 2 positional arguments but 3 were given
+
+少了self
+
+ C = [[0 for _ in len(A)] for _ in len(B)]
+TypeError: 'int' object is not iterable
 
 
+C = [[0 for _ in range(len(B[0]))] for _ in range(len(A))]
+
+
+class Solution:
+    def matrixMultiply(self, A, B):
+        C = [[0 for _ in range(len(B[0]))] for _ in range(len(A))]
+        for i in range(len(A)):
+            for j in range(len(B)):
+                for k in range(len(A[0])):
+                    C[i][j] = A[i][k] * B[k][j]
+        return C
+A = [[1,2]]
+B = [[1],[2]]
+C = Solution().matrixMultiply(A, B)
+print(C)
+
+ C[i][j] = A[i][k] * B[k][j]
+IndexError: list index out of range
+
+
+
+class Solution:
+    def matrixMultiply(self, A, B):
+        C = [[0 for _ in range(len(B[0]))] for _ in range(len(A))]
+        for i in range(len(A)):
+            for j in range(len(B[0])):
+                for k in range(len(A[0])):
+                    C[i][j] += A[i][k] * B[k][j]
+        return C
+A = [[1,2]]
+B = [[1],[2]]
+C = Solution().matrixMultiply(A, B)
+print(C)
 
 
 
