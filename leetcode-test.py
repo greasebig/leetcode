@@ -4145,11 +4145,39 @@ print(C)
 
 
 
+# 格灵 7.15
+class Solution:
+    def findout(self, ori, target):
+        min_length = 0
+        n = len(ori)
+        if n == 0:
+            return min_length
+        low, height = 0, 1
+        while height - low >= 0 and height <= n:
+            if sum(ori[low:height]) >= target:
+                min_length = self.get_min_length(min_length, height, low)
+                if min_length == 1:
+                    return min_length
+                low += 1
+            else :
+                height += 1
+        return min_length
 
 
+    def get_min_length(self, min_length, high, low):
+        if min_length == 0:
+            min_length = high - low
+        else :
+            min_length = min(min_length, high - low)
+        return min_length
 
+result = Solution().findout([1,2,3],1)
+print(result)
 
+算法复杂度O(n^2),因为有一个sum 可以优化到O(n)
 
+忘记问转正了 因为感觉过不了 主要感觉也不匹配 
+他不了解 而且他们项目只有 缺陷生图 cn+inpaint控制生图
 
 
 
