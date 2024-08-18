@@ -82,7 +82,7 @@ if __name__ == '__main__':
 
 '''
 
-
+'''
 def solve() -> None:
     n = int(input())
     adj = [[] for _ in range(n)]
@@ -105,3 +105,89 @@ def solve() -> None:
 if __name__ == '__main__':
     solve()
 
+'''
+
+# Input: color path and commands
+path = input()
+command = input()
+
+# Get the lengths of path and command
+n = len(path)
+m = len(command)
+
+# Initialize the dp table
+dp = [[0] * (m + 1) for _ in range(n + 1)]
+
+# Iterate over each character in the path and command
+for i in range(1, n + 1):
+    for j in range(1, m + 1):
+        # If the command matches the current path character
+        if command[j - 1] == path[i - 1]:
+            dp[i][j] = dp[i - 1][j - 1] + 1
+        else:
+            dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
+
+# Output the length of the longest subarray of identical colors
+print(dp[n][m])
+
+
+
+'''
+gpt4o完败 估计现在出题都后置检查一下gpt？三次不过则算出题成功？
+图片不行
+gpt4omini更加不行
+我的逻辑也理不清
+
+
+
+
+import sys
+
+path = input()
+command = input()
+
+m = len(path)
+n = len(command)
+
+dp = [[0]*(n+1) for _ in range(m+1)]
+
+
+for i in range(1, m + 1):
+    for j in range(1, n + 1):
+        if command[j - 1] == '*':
+            dp[i][j] = max(dp[i][j - 1], dp[i - 1][j])
+        elif path[i - 1] == command[j - 1]:
+            dp[i][j] = dp[i - 1][j - 1] + 1
+        else:
+            dp[i][j] = dp[i][j - 1]
+
+print(dp[m][n])
+
+
+
+for i in range(1, m + 1):
+    for j in range(1, n + 1):
+        if command[j - 1] == '*':
+            dp[i][j] = max(dp[i][j - 1]+1, dp[i - 1][j])  # *可以匹配0次或多次
+        elif path[i - 1] == command[j - 1]:
+            dp[i][j] = dp[i - 1][j - 1] + 1  # 匹配当前字符
+        else:
+            dp[i][j] = dp[i][j - 1]  # 尝试不匹配当前字符
+
+
+
+
+
+
+for i in range(n+1):
+    for j in range(m+1):
+        if j > 0 and command[j-1] == '*':
+            if i>1:
+                if path[i-1] == path[i-2]:
+                    dp[i][j] = dp[i-1][j-1] + 1 
+            
+        
+        if i>0 and j>0 and command[j-1] == path[i-1]:
+            dp[i][j] = max(dp[i][j], dp[i-1][j-1]+1)
+
+'''
