@@ -107,6 +107,8 @@ if __name__ == '__main__':
 
 '''
 
+'''
+
 # Input: color path and commands
 path = input()
 command = input()
@@ -129,7 +131,7 @@ for i in range(1, n + 1):
 
 # Output the length of the longest subarray of identical colors
 print(dp[n][m])
-
+'''
 
 
 '''
@@ -191,3 +193,36 @@ for i in range(n+1):
             dp[i][j] = max(dp[i][j], dp[i-1][j-1]+1)
 
 '''
+
+
+N = int(input())
+blk = int(input())
+nums = [int(c) for c in input().split()]
+
+res = {}
+
+for i in range(0, N, blk):
+    cur_blk = nums[i:i + blk]
+    tp = tuple(cur_blk)
+    if tp not in res:
+        res[tp] = [i, 1]  # 下标、出现次数
+    else:
+        res[tp][1] += 1
+
+sorted_res = sorted(res.items(), key=lambda x: x[1][0])
+ans = []
+for key, value in sorted_res:
+    ans.extend(key)  # 将整个数据块加入结果
+    ans.append(value[1])  # 加入计数
+
+print(' '.join(map(str, ans)))
+
+
+
+
+
+
+
+
+
+
