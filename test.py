@@ -218,7 +218,7 @@ for key, value in sorted_res:
 print(' '.join(map(str, ans)))
 '''
 
-
+'''
 
 INF = 20220201
 
@@ -264,13 +264,20 @@ def main():
 if __name__ == "__main__":
     main()
 
-
-
-
-
-
-
-
+'''
+a=[1,2,3]
+print('a=[1,2,3]')
+a.reverse
+print('a.reverse  ',a)
+a=[1,2,3]
+print('a=[1,2,3]')
+a.reverse() 
+print('a.reverse()  ',a)
+a=3e-5
+print('a=3e-5 ',a)
+print('a*10 ',a*10)
+print('a*100 ',a*100)
+#print(a.2f)
 
 
 
