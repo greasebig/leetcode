@@ -194,7 +194,7 @@ for i in range(n+1):
 
 '''
 
-
+'''
 N = int(input())
 blk = int(input())
 nums = [int(c) for c in input().split()]
@@ -216,6 +216,54 @@ for key, value in sorted_res:
     ans.append(value[1])  # 加入计数
 
 print(' '.join(map(str, ans)))
+'''
+
+
+
+INF = 20220201
+
+def main():
+    import sys
+    #input = sys.stdin.read
+    data = []
+    index = 0
+
+    def next_int():
+        nonlocal index
+        index += 1
+        return int(data[index-1])
+
+    n, m, a = 3,6,2
+    graph = [[] for _ in range(n + 1)]
+    for _ in range(3):
+        vi, ui, wi = 1,2,1
+        graph[vi].append((ui, wi))
+    for _ in range(3):
+        vi, ui, wi = 2,3,1
+        graph[vi].append((ui, wi))
+
+    dp = [[0] * (a + 1) for _ in range(n + 1)]
+    st = [[False] * (a + 1) for _ in range(n + 1)]
+    dp[1][0] = 1
+
+    for i in range(a):
+        for v in range(1, n + 1):
+            if dp[v][i] > 0 or st[v][i]:
+                for u, w in graph[v]:
+                    if i + w <= a:
+                        dp[u][i + w] = (dp[u][i + w] + dp[v][i]) % INF
+                        if dp[u][i + w] + dp[v][i] >= INF:
+                            st[u][i + w] = True
+                        if st[v][i]:
+                            st[u][i + w] = True
+
+    if st[n][a]:
+        print("All roads lead to Home!")
+    print(dp[n][a])
+
+if __name__ == "__main__":
+    main()
+
 
 
 
