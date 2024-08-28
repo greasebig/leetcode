@@ -265,6 +265,7 @@ if __name__ == "__main__":
     main()
 
 '''
+'''
 a=[1,2,3]
 print('a=[1,2,3]')
 a.reverse
@@ -278,6 +279,96 @@ print('a=3e-5 ',a)
 print('a*10 ',a*10)
 print('a*100 ',a*100)
 #print(a.2f)
+'''
+
+'''
+import sys
+
+n,k = map(int,input().split(' '))
+a= list(map(int,input().split(' ')))
+
+win_rate=0
+
+for i in range(n):
+    #per_win_rate += a[i]/(a[i]+a[j])
+    per_win_rate=1
+    # k=1
+    for j in range(n):
+        if j==i : continue
+        per_win_rate *= a[i]/(a[i]+a[j])
+    win_rate += per_win_rate
+print(f'{win_rate:.2f}')
+
+'''
+'''
+import sys
+
+n=int(input())
+string_a=input()
+
+stack_a = []
+length=0
+count=0
+for i in range(n):
+    if string_a[i]=='(' :
+        stack_a.append(string_a[i])
+        length+=1
+        count+=1
+    else:
+        if count<=0: break
+        if stack_a.pop()=='(':
+            length+=1
+            count-=1
+
+print(length)
+'''
+
+import sys
+
+n,k = map(int,input().split(' '))
+a= list(map(int,input().split(' ')))
+
+win_rate=0
+
+per_win_rate = [[0]*n for _ in range(n)]
+for i in range(n):
+    for j in range(n):
+        per_win_rate[i][j] = a[i]/(a[i]+a[j])
+win_1_rate=[]
+
+for i in range(n):
+    #if k==1
+    temp=1
+    for j in range(n):
+        if i==j: continue
+        temp *= per_win_rate[i][j]
+    #if k=2:
+    # win_rate += temp
+    win_1_rate.append(temp)
+
+for i in range(n):
+    if k==1:
+        win_rate+=win_1_rate[i]
+    if k==2:
+        for j in range(n):
+            if j==i: continue
+            win_rate+=win_1_rate[i]*win_1_rate[j]
+    if k==3:
+        for j in range(n):
+            if j==i: continue
+            for k in range(n):
+                if k==i or k==j: continue
+                win_rate+=win_1_rate[i]*win_1_rate[j]*win_1_rate[k]
+
+
+print(f'{win_rate:.2f}')
+
+
+
+
+
+
+
 
 
 
