@@ -323,6 +323,9 @@ for i in range(n):
 print(length)
 '''
 
+
+# 这道题好像就是得用递归或者dfs写
+'''
 import sys
 
 n,k = map(int,input().split(' '))
@@ -364,11 +367,69 @@ for i in range(n):
 print(f'{win_rate:.2f}')
 
 
+'''
+import re
 
+def process_string(s):
+    # 先处理所有的大小写转换
 
+    # 定义正则表达式模式，匹配 #(upper)[...] 的结构
+    pattern = r"#\(upper\)\[([^\]]+)\]"
 
+    # 使用re.sub进行替换，匹配到的内容用lambda函数来转换为大写
+    output_str = re.sub(pattern, lambda match: f"{match.group(1).upper()}", s)
 
+    # 定义正则表达式模式，匹配 #(upper)[...] 的结构
+    pattern = r"#\(lower\)\[([^\]]+)\]"
 
+    # 使用re.sub进行替换，匹配到的内容用lambda函数来转换为大写
+    output_str = re.sub(pattern, lambda match: f"{match.group(1).lower()}", output_str)
+
+    s = output_str
+    
+    result = ""
+    i = 0
+    while i < len(s):
+        if s[i].isdigit():
+            # 获取重复次数
+            count = int(s[i])
+            i += 1
+            # 处理括号内的内容
+            if s[i] == '[':
+                j = i + 1
+                depth = 1
+                while depth > 0:
+                    if s[j] == '[':
+                        depth += 1
+                    elif s[j] == ']':
+                        depth -= 1
+                    j += 1
+                sub_result = process_string(s[i+1:j-1])
+                result += sub_result * count
+                i = j
+            else:
+                # 处理单个字符的重复
+                result += s[i] * count
+                i += 1
+        else:
+            # 处理普通字符
+            result += s[i]
+            i += 1
+    return result
+
+def apply_functions(s):
+    # 处理upper、lower等函数
+    # 这里可以扩展，支持更多的函数
+    return process_string(s)
+    
+
+# 示例用法
+s1 = "3[a]2[bc]"
+s2 = "3[#(upper)[a]2[bc]]"
+#print(apply_functions(s1))  # 输出 aaabcbc
+#print(apply_functions(s2))  # 输出 AbcbcAbcbcAbcbc
+s1 = "3[[a]2#(upper)[bc]]"
+print(apply_functions(s1))  # 输出 aaabcbc
 
 
 
