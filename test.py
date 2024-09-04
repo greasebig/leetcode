@@ -368,6 +368,9 @@ print(f'{win_rate:.2f}')
 
 
 '''
+
+
+'''
 import re
 
 def process_string(s):
@@ -431,11 +434,29 @@ s2 = "3[#(upper)[a]2[bc]]"
 s1 = "3[[a]2#(upper)[bc]]"
 print(apply_functions(s1))  # 输出 aaabcbc
 
+'''
 
+import sys
 
+def main(n,nums):
 
+  nums2 = nums.copy()  # Create a copy for sorting
+  nums2.sort()
 
+  dic = {}  # Dictionary to store index mapping
+  for i, num in enumerate(nums2):
+    dic[num] = i
 
+  s = 0
+  for i, num in enumerate(nums):
+    if i % 2 != dic[num] % 2:
+      s += 1
+
+  print(s // 2)
+
+if __name__ == "__main__":
+  main(4,[2,4,3,1])
+  main(4,[1,2,3,4])
 
 
 
