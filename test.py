@@ -435,7 +435,7 @@ s1 = "3[[a]2#(upper)[bc]]"
 print(apply_functions(s1))  # 输出 aaabcbc
 
 '''
-
+'''
 import sys
 
 def main(n,nums):
@@ -457,6 +457,11 @@ def main(n,nums):
 if __name__ == "__main__":
   main(4,[2,4,3,1])
   main(4,[1,2,3,4])
+'''
 
 
 
+print([1]*2)
+print([[1]*2 for i in range(3)])
+print([[1 for _ in range(2)] for i in range(3)])
+print([[1]*2]*3)
