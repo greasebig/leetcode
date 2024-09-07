@@ -459,9 +459,37 @@ if __name__ == "__main__":
   main(4,[1,2,3,4])
 '''
 
-
+'''
 
 print([1]*2)
 print([[1]*2 for i in range(3)])
 print([[1 for _ in range(2)] for i in range(3)])
 print([[1]*2]*3)
+'''
+
+
+
+
+
+first_line = list('QWERTYUIOP')
+print(first_line)
+
+first_line = ''.join(first_line)
+#first_line = str(first_line)
+print(first_line)
+
+
+first_line = 'QWERTYUIOP'
+#for i in first_line:
+    #print(i)
+
+
+
+
+
+
+
+
+
+
+
