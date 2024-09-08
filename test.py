@@ -468,7 +468,7 @@ print([[1]*2]*3)
 '''
 
 
-
+'''
 
 
 first_line = list('QWERTYUIOP')
@@ -483,13 +483,43 @@ first_line = 'QWERTYUIOP'
 #for i in first_line:
     #print(i)
 
+'''
+
+
+from collections import defaultdict  
+  
+T = int(input())  
+mp = defaultdict(int)  # 使用defaultdict来自动处理不存在的键  
+  
+while T > 0:  
+    T -= 1  
+  
+    x, y = map(int, input().split())  
+    l = max((key for key in mp if key <= x), default=None)  
+  
+    # 向右移动x直到找到一个空位或超出mp的范围  
+    while l is not None and mp[l] >= x:  
+        x = mp[l] + 1  
+        l = max((key for key in mp if key <= x), default=None)  
+  
+    r = min((key for key in mp if key > x), default=None)  
+    # 清理x到x+y-1之间的所有已占用位置  
+    if r is not None:  
+        while r is not None and r <= x + y - 1:  
+            temp = mp[r]  
+            del mp[r]  
+            y += temp - r + 1  
+            r = min((key for key in mp if key > r), default=None)  
+  
+    mp[x] = x + y - 1  
+    print(x + y - 1)
 
 
 
-
-
-
-
-
+'''
+a = [9,8,7]
+sorteda = sorted(range(len(a)),key=lambda x:a[x])
+print(sorteda)
+'''
 
 

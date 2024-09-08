@@ -1453,11 +1453,27 @@ else:
 * DFS的时间复杂度和空间复杂度是多少？
 
 
+# sort
+## .sort()原地改变，不需要赋值，返回值是None
 
+## sorted indices写法,需要赋值
+    price = [9,8,7]
+    sorted_indices = [index for index,value in sorted(enumrate(price)使用这个作为sorted的x输入-这个应该是返回一个元组,key=lambda x:x[1])]
 
+法二
 
+    sorted_indices = sorted(range(len(scores))使用这个做为sorted的i输入, key=lambda i:scores[i], reverse=True)
 
+    上一个更换成这个写法
+    sorted_indices = sorted(range(len(price))使用这个做为sorted的i输入-也就是sorted接受一个列表作为输入或者元组列表的输入，key输入施加方法, key=lambda i:price[i])
 
+    key默认应该是 lambda x:x 或者 lambda x:x[0]
+
+    a = [9,8,7]
+    sorteda = sorted(range(len(a)),key=lambda x:a[x])
+    print(sorteda)
+
+    [2, 1, 0]
 
 
 
