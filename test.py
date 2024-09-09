@@ -485,7 +485,7 @@ first_line = 'QWERTYUIOP'
 
 '''
 
-
+'''
 from collections import defaultdict  
   
 T = int(input())  
@@ -514,12 +514,82 @@ while T > 0:
     mp[x] = x + y - 1  
     print(x + y - 1)
 
-
+'''
 
 '''
 a = [9,8,7]
 sorteda = sorted(range(len(a)),key=lambda x:a[x])
 print(sorteda)
 '''
+
+from collections import deque
+maze = eval(input())
+direction = [(0,-1),(0,1),(-1,0),(1,0)]
+#print(maze)
+start_point = []
+end_point = []
+for i in range(len(maze)):
+    for j in range(len(maze[0])):
+        if maze[i][j] == 'S':
+            start_point = (i,j)
+        elif maze[i][j] == 'E':
+            end_point = (i,j)
+
+rows, cols = len(maze), len(maze[0])
+single_direction = ['D', 'U', 'L', 'R']
+visited = [[False]*len(maze[0])   for _ in range(len(maze))]
+
+
+def bfs(maze, start, end):
+    queue = deque([(start, 1)])
+    while queue:
+        position, path_length = queue.popleft()
+        x,y = position
+        visited[x][y] == True
+        if position == end:
+            return path_length
+        for (dx,dy) in direction:
+            if maze[x][y] in single_direction:
+                index = single_direction.index(maze[x][y])
+                if (dx,dy) != direction[index]: continue
+            nx, ny = x+dx, y+dy
+            if 0 <= nx < rows and 0 <= ny < cols and maze[x][y] != '1' and not visited[nx][ny]:
+                queue.append(((nx,ny), path_length + 1))
+    return -1
+                
+                
+    
+print(bfs(maze, start_point, end_point))    
+    
+    
+    
+    
+    
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
