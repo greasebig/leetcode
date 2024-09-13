@@ -522,6 +522,9 @@ sorteda = sorted(range(len(a)),key=lambda x:a[x])
 print(sorteda)
 '''
 
+
+
+'''
 from collections import deque
 maze = eval(input())
 direction = [(0,-1),(0,1),(-1,0),(1,0)]
@@ -560,21 +563,67 @@ def bfs(maze, start, end):
                 
     
 print(bfs(maze, start_point, end_point))    
+'''
     
     
     
     
-    
-    
-    
+'''  
+class Solution:
+    def assignJobs(self , n: int, x: int, y: int, z: int) -> int:
+        # write code here
+        
+        count = 0
+        def dfs(n1,x1,y1,z1):
+            nonlocal count
+            if n1 == 0:
+                count += 1
+                return 
+            if x1-1 >=0 : dfs(n1-1, x1-1, y1, z1)
+            if y1-1 >=0 : dfs(n1-1, x1, y1-1, z1)
+            if z1-1 >=0 : dfs(n1-1, x1, y1, z1-1)
 
+        dfs(n,x,y,z)
+        return count
 
+print(Solution().assignJobs(5,1,2,3))
+'''
 
+'''
+class Solution:
+    def assignJobs(self , n: int, x: int, y: int, z: int) -> int:
+        # write code here
+        
+        current = [0,0,0]
+        def dfs(n1,x1,y1,z1,current,index):
+            if current[0] > x1 or current[1] > y1 or current[2] > z1:
+                return 0
+            if index == n1:
+                return 1
+            total_ways = 0
+            for i in range(3):
+                current[i] += 1
+                total_ways += dfs(n1, x1, y1, z1, current, index+1)
+                current[i] -= 1
+            return total_ways
+        return dfs(n,x,y,z,current,0)
+print(Solution().assignJobs(5,1,2,3))
 
+'''
 
-
-
-
+class Solution:
+    def assignJobs(self , n: int, x: int, y: int, z: int) -> int:
+        # write code here
+        
+        count = 0
+        for  i in range(min(n,x)+1):
+            for j in range(min(n-i,y)+1):
+                k = n-i-j
+                if k<=z and k>= 0:
+                    count += 1
+        return count
+        
+print(Solution().assignJobs(5,1,2,3))
 
 
 
