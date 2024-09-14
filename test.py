@@ -611,6 +611,8 @@ print(Solution().assignJobs(5,1,2,3))
 
 '''
 
+
+'''
 class Solution:
     def assignJobs(self , n: int, x: int, y: int, z: int) -> int:
         # write code here
@@ -624,10 +626,20 @@ class Solution:
         return count
         
 print(Solution().assignJobs(5,1,2,3))
+'''
 
 
-
-
+x_list=[1,2,3,4]
+y_list=[5,6,7,8]
+place = [(x,y) for x,y in zip(x_list, y_list)]
+print(place)
+print(zip(x_list, y_list))
+x,y = place[0]
+print(x,y)
+place_set = set(place)
+print(len(place_set))
+for item in place_set:
+    print(item)
 
 
 
