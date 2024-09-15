@@ -628,7 +628,7 @@ class Solution:
 print(Solution().assignJobs(5,1,2,3))
 '''
 
-
+'''
 x_list=[1,2,3,4]
 y_list=[5,6,7,8]
 place = [(x,y) for x,y in zip(x_list, y_list)]
@@ -641,9 +641,68 @@ print(len(place_set))
 for item in place_set:
     print(item)
 
+'''
 
 
 
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+#
+# 代码中的类名、方法名、参数名已经指定，请勿修改，直接返回方法规定的值即可
+#
+# 
+# @param head ListNode类 
+# @return ListNode类
+#
+
+class ListNode:
+    def __init__(self, x=0, next=None):
+        self.val = x
+        self.next = next
+
+class Solution:
+    def formatList(self , head ):
+        # write code here
+        cur_operate = head
+        tail = head
+        store = head.next
+        is_reverse = False
+        while store:
+            cur_operate = store
+            store = cur_operate.next
+            if is_reverse:
+                #store = cur_operate.next
+                cur_operate.next = head 
+                head = cur_operate
+            
+            elif not is_reverse:
+                tail.next = cur_operate
+                tail = tail.next
+                tail.next = None
+
+            is_reverse = not is_reverse
+        return head
+
+
+def turn2tree(a):
+    #dummy = head
+    cur = None
+    for i,item in enumerate(a) :
+        if i == 0: 
+            head = ListNode(item)
+            cur = head
+            next = head.next
+        else :
+            next = ListNode(item)
+            cur.next = next
+            cur = next
+
+    return head
+
+tree1 = turn2tree({1,2,3,4,5})
+Solution().formatList(tree1)
 
 
 
