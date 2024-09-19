@@ -656,7 +656,7 @@ for item in place_set:
 # @param head ListNode类 
 # @return ListNode类
 #
-
+'''
 class ListNode:
     def __init__(self, x=0, next=None):
         self.val = x
@@ -703,8 +703,72 @@ def turn2tree(a):
 
 tree1 = turn2tree({1,2,3,4,5})
 Solution().formatList(tree1)
+'''
 
 
+
+'''
+
+
+def func():
+
+    # please define the python3 input here. For example: a,b = map(int, input().strip().split())
+    # please finish the function body here.
+    # please define the python3 output here. For example: print().
+    #N = int(input())
+    #K = int(input())
+    #matrix = []
+    #for _ in range(N):
+    #    row = list(map(int, input().strip().split()))
+    #    matrix.append(row)
+
+    N = 5
+    K = 12
+    matrix = [[0, 0, 0, 0, 0],
+    [9, 9, 3, 9, 0],
+    [0, 0 ,0 ,0 ,0],
+    [0, 9 ,5 ,9 ,9],
+    [0, 0, 0, 0, 0]]
+    
+    defence = max(matrix[0][0], matrix[-1][-1])
+    direction = [(1,0),(0,1),(-1,0),(0,-1)]
+    record_defence = []  
+    def dfs(defence, cur_x, cur_y, reverse):
+        nonlocal record_defence
+        if cur_x == N-1 and cur_y == N-1 : 
+            record_defence.append(defence)
+            return 
+        for i in range(4):
+            dx,dy = direction[i]
+            if cur_x+dx < 0 or cur_x+dx > N-1 or cur_y+dy < 0 or cur_y+dy > N-1 :
+                continue
+            if i > 1:
+                if K >= 2*N -2 + 2 * reverse:
+                    dfs(max(defence, matrix[cur_y+dy][cur_x+dx]), \
+                        cur_x+dx, cur_y+dy, reverse+1)
+                else: continue
+            else:
+                dfs(max(defence, matrix[cur_y+dy][cur_x+dx]), \
+                    cur_x+dx, cur_y+dy, reverse)
+    
+    dfs(defence, 0, 0, 0)
+    print(min(record_defence))
+
+
+if __name__ == "__main__":
+    func()
+'''
+
+import copy
+lista = []
+for _ in range(2):
+    lista.append(list(map(int,input().split())))
+print(lista)
+print(min(lista))
+
+listb = copy.deepcopy(lista[0])
+listb.extend(lista[1])
+print(min(listb))
 
 
 
