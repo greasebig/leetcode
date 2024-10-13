@@ -758,7 +758,7 @@ def func():
 if __name__ == "__main__":
     func()
 '''
-
+'''
 import copy
 lista = []
 for _ in range(2):
@@ -769,6 +769,53 @@ print(min(lista))
 listb = copy.deepcopy(lista[0])
 listb.extend(lista[1])
 print(min(listb))
+
+
+
+'''
+
+
+import sys
+
+n = int(input())
+lista = list(map(int, input().split()))
+zero_num = 0
+factor = 1
+for i in range(n):
+    leni = len(str(lista[i])) - 1
+    factor *= lista[i]
+    while leni > 0:
+
+        if factor % (leni * 10) == 0 :
+            factor //= (leni * 10) 
+            zero_num += leni
+            break 
+        else:
+            leni -= 1
+
+print(zero_num)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
