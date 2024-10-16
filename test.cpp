@@ -90,5 +90,6 @@ int main() {
 // #include <iostream>
 // using namespace std;
 
+// Option 2: Prefixing with std::
 
 
