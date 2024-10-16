@@ -80,6 +80,86 @@ for b in a:
 这样使用才可以
 
 
+# g++
+g++ --version
+
+cmd 可用， vscode终端不可用？
+
+C:\Users\13162>g++ --version
+g++ (x86_64-win32-seh-rev0, Built by MinGW-Builds project) 14.2.0
+Copyright (C) 2024 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+
+C:\Users\13162>
+
+
+使用 VS Code 终端的正确 Shell
+检查 VS Code 使用的终端类型。你可以通过 Ctrl + ` 打开终端，并确保选择了正确的 shell：
+点击终端右上角的下拉箭头。
+确保选择了 Command Prompt（如果你在 cmd 中设置成功），而不是 PowerShell 或其他 shell。
+
+
+解决方法：打开.vscode（外层的）下的c_cpp_properties.json文件,把正确的gcc安装地址放进“compilerPath”中。
+
+
+    {
+        "configurations": [
+            {
+                "name": "Win32",
+                "includePath": [
+                    "${workspaceFolder}/**"
+                ],
+                "defines": [
+                    "_DEBUG",
+                    "UNICODE",
+                    "_UNICODE"
+                ],
+                "compilerPath": "C:/mingw64/bin/g++.exe"
+            }
+        ],
+        "version": 4
+    }
+
+改
+
+    {
+        "configurations": [
+            {
+                "name": "Win32",
+                "includePath": [
+                    "${workspaceFolder}/**"
+                ],
+                "defines": [
+                    "_DEBUG",
+                    "UNICODE",
+                    "_UNICODE"
+                ],
+                "compilerPath": "C:\\mingw64\\bin\\g++.exe"
+            }
+        ],
+        "version": 4
+    }
+
+彻底关闭重启
+
+
+![alt text](assets_picture/win本地运行/image.png)
+
+
+vscode powershell cmd 都能用
+
+## 插件
+
+
+![alt text](assets_picture/win本地运行/image-1.png)
+
+好用的
+
+右键
+
+![alt text](assets_picture/win本地运行/image-2.png)
 
 
 
