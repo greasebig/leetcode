@@ -104,23 +104,29 @@ using namespace std;
 /* 原代码有输出，但与题目要求不完全匹配，此处省略 */
 
 
-class Test {
-public:
-    Test(int a=0, int b=0) { x = a; y = b; }  
-    ~Test() {  }
-    void print() { cout << x << "*" << y << " ";}
-private:
-    int x;
-    int y;
-};
+// int a=0, int b=0
 
-int main() {
-    Test *p = new Test(1, 2);  // 创建一个动态对象
-    Test *q = new Test[3];     // 创建一个包含3个对象的数组
-    p->print();
-    q++->print();
-    return 0;
-}
+
+// class Test {
+// public:
+//     Test(int a=0, int b=0) { x = a; y = b; }  
+//     ~Test() {  }
+//     void print() { cout << x << "*" << y << " ";}
+// private:
+//     int x;
+//     int y;
+// };
+
+// int main() {
+//     Test *p = new Test(1, 2);  // 创建一个动态对象
+//     Test *q = new Test[3];     // 创建一个包含3个对象的数组
+//     p->print();
+//     q++->print();
+//     return 0;
+// }
+
+
+// 确实输出是 1*2 0*0 
 
 // 要求输出为  1*2 0*0       
 // 修改 Test 中代码
@@ -135,6 +141,49 @@ int main() {
 // 动态分配的数组元素初始化：当你通过 new Test[3] 创建 Test 类对象数组时，数组中的元素没有参数传递给构造函数，因此将调用默认的构造函数 Test(0, 0)。
 
 // 指针操作：q++->print(); 这一行首先输出当前指针所指向的对象，然后将指针 q 向后移动到下一个元素。
+
+
+
+// 要求输出 1 2 3 4 
+// B(x, y)
+
+
+
+class B {
+public:
+    B(int x=0,int y=0):a(x),b(y){} // 初始化成员a和b
+    void f(){cout<<a<<" "<<b<<" ";} // 注意：原图中cout后缺少#include<iostream>和使用std::前缀，且字符串连接部分有误
+    int a;
+    int b;
+// protected:
+//     int b;
+};
+
+class D:public B {
+    int d; 
+public: 
+    D(int x,int y,int z,int k):B(x, y) {d=z;e=k;} // 调用基类构造函数，并初始化d和e
+    void g(){cout<<d<<" "<<e;} 
+protected: 
+    int e; 
+};
+
+int main() {
+    D o1(1,2,3,4); 
+    o1.f(); 
+    o1.g(); 
+    return 0; 
+}
+
+
+
+
+
+
+
+
+
+
 
 
 
