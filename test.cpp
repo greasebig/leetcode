@@ -2,45 +2,45 @@
 using namespace std;
 
 
-class B {
-    int a;
-    public :
-        B(int i = 2): a(i) {num++;cout<<a<<"_"<<num;}
-        static int num;
-    };
-int B::num = 0;
-void f3() {
-    B o1;
-    if(o1.num>3)
-        throw 1.0;
-    else
-        throw -1;
-}
+// class B {
+//     int a;
+//     public :
+//         B(int i = 2): a(i) {num++;cout<<a<<"_"<<num;}
+//         static int num;
+//     };
+// int B::num = 0;
+// void f3() {
+//     B o1;
+//     if(o1.num>3)
+//         throw 1.0;
+//     else
+//         throw -1;
+// }
 
-void f2() {
-    B *o2=new B;
-    try {
-        f3();
-    } catch (double) {
-        cout << "#";
-    }
-}
+// void f2() {
+//     B *o2=new B;
+//     try {
+//         f3();
+//     } catch (double) {
+//         cout << "#";
+//     }
+// }
 
-void f1() {
-    try {
-        f2();
-        throw 1;
-    } catch (int) {
-        cout << "&" << endl;
-    }
-}
+// void f1() {
+//     try {
+//         f2();
+//         throw 1;
+//     } catch (int) {
+//         cout << "&" << endl;
+//     }
+// }
 
-int main() {
-    B o3(5);
-    B &o4 = o3;
-    f1();
-    return 0;
-}
+// int main() {
+//     B o3(5);
+//     B &o4 = o3;
+//     f1();
+//     return 0;
+// }
 
 // 确实可以 5_12_22_3&
 // cd "c:\Users\13162\Desktop\工作\多模\leetcode\" && g++ test.cpp -o test && "c:\Users\13162\Desktop\工作\多模\leetcode\"test
@@ -91,5 +91,55 @@ int main() {
 // using namespace std;
 
 // Option 2: Prefixing with std::
+
+
+// int main() {
+//     Test t;  // 创建Test类的对象t
+//     // 原代码在main函数中未直接输出1*2*0*，但可以通过构造和析构函数间接输出相关值
+//     // 若要直接输出类似格式，需在main函数中手动添加输出语句，但需注意题目原始要求可能有误
+//     return 0;
+// }
+
+// 构造函数，初始化x为1，y为2
+/* 原代码有输出，但与题目要求不完全匹配，此处省略 */
+
+
+class Test {
+public:
+    Test(int a=0, int b=0) { x = a; y = b; }  
+    ~Test() {  }
+    void print() { cout << x << "*" << y << " ";}
+private:
+    int x;
+    int y;
+};
+
+int main() {
+    Test *p = new Test(1, 2);  // 创建一个动态对象
+    Test *q = new Test[3];     // 创建一个包含3个对象的数组
+    p->print();
+    q++->print();
+    return 0;
+}
+
+// 要求输出为  1*2 0*0       
+// 修改 Test 中代码
+
+
+// 解释：
+// Test *p = new Test(1, 2); 创建一个 Test 对象，p->print(); 输出 1*2。
+// Test *q = new Test[3]; 创建包含3个 Test 对象的数组，每个对象的默认构造函数被调用，初始化为 (0, 0)。
+// q++->print(); 输出数组中的第一个元素（0*0），然后将 q 指针递增到下一个数组元素。
+
+
+// 动态分配的数组元素初始化：当你通过 new Test[3] 创建 Test 类对象数组时，数组中的元素没有参数传递给构造函数，因此将调用默认的构造函数 Test(0, 0)。
+
+// 指针操作：q++->print(); 这一行首先输出当前指针所指向的对象，然后将指针 q 向后移动到下一个元素。
+
+
+
+
+
+
 
 
