@@ -161,6 +161,20 @@ vscode powershell cmd 都能用
 
 ![alt text](assets_picture/win本地运行/image-2.png)
 
+## debug
+
+Unable to start debugging. Unexpected GDB output from command-environment-cd C:lUsers11131621Desktop!l工作多模 leetcode"C:Users1131621Desktop!工作1多模leetcode: No such file or directory.
+
+win下无法解析中文名字 只能放到英文路径
+
+
+
+
+
+
+
+
+
 
 
 # end
