@@ -1,4 +1,4 @@
-# win
+# win py
 import sys
 
 n = int(input())
