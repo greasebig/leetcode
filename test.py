@@ -775,27 +775,65 @@ print(min(listb))
 '''
 
 
-import sys
+# import sys
 
-n = int(input())
-lista = list(map(int, input().split()))
-zero_num = 0
-factor = 1
-for i in range(n):
-    leni = len(str(lista[i])) - 1
-    factor *= lista[i]
-    while leni > 0:
+# n = int(input())
+# lista = list(map(int, input().split()))
+# zero_num = 0
+# factor = 1
+# for i in range(n):
+#     leni = len(str(lista[i])) - 1
+#     factor *= lista[i]
+#     while leni > 0:
 
-        if factor % (leni * 10) == 0 :
-            factor //= (leni * 10) 
-            zero_num += leni
-            break 
-        else:
-            leni -= 1
+#         if factor % (leni * 10) == 0 :
+#             factor //= (leni * 10) 
+#             zero_num += leni
+#             break 
+#         else:
+#             leni -= 1
 
-print(zero_num)
+# print(zero_num)
 
 
+def top_k_elements(nums, k):
+    # 定义一个最小堆调整函数
+    def heapify(heap, idx, heap_size):
+        smallest = idx
+        left = 2 * idx + 1
+        right = 2 * idx + 2
+        
+        if left < heap_size and heap[left] < heap[smallest]:
+            smallest = left
+        if right < heap_size and heap[right] < heap[smallest]:
+            smallest = right
+        
+        if smallest != idx:
+            heap[idx], heap[smallest] = heap[smallest], heap[idx]
+            heapify(heap, smallest, heap_size)
+    
+    # 构建一个最小堆
+    def build_heap(heap):
+        n = len(heap)
+        for i in range(n // 2 - 1, -1, -1):
+            heapify(heap, i, n)
+    
+    # 初始化堆
+    heap = nums[:k]
+    build_heap(heap)
+    
+    # 遍历剩余数组
+    for i in range(k, len(nums)):
+        if nums[i] > heap[0]:
+            heap[0] = nums[i]
+            heapify(heap, 0, k)
+    
+    return heap
+
+# 测试用例
+nums = [3, 2, 1, 5, 6, 4, 7]
+k = 5
+print(top_k_elements(nums, k))  # 输出 [5, 6]
 
 
 
